@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { drawerWidth } from '../../config/constants';
 
-export default styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   // backgroundColor: 'red',
@@ -22,3 +22,5 @@ export default styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<
     marginLeft: 0,
   }),
 }));
+
+export default Main

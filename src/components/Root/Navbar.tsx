@@ -7,6 +7,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from 'styled-components/root/AppBar';
 import { navbarBackground } from 'config/constants';
 import UserMenu from './UserMenu';
+import { useContext } from 'react';
+import NavbarContext from 'contexts/NavbarContext';
 
 interface propTypes {
   open: boolean
@@ -14,13 +16,16 @@ interface propTypes {
 }
 
 const NavBar = ({ open, handleOpen }: propTypes) => {
+  const navbarContext = useContext(NavbarContext);
+  console.log(navbarContext);
+
   return (
     <AppBar position="fixed" style={navbarBackground} open={open} >
       <Toolbar > {/* variant="dense" */}
         <IconButton color="inherit" onClick={handleOpen} edge="start" sx={{ mr: 2, ...(open && { display: 'none' }) }}>
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }} >TABLERO INDICADORES</Typography>
+        <Typography variant="h6" textTransform='uppercase' noWrap component="div" sx={{ flexGrow: 1 }} >{navbarContext.navTitle ?? 'TABLERO INDICADORES'}</Typography>
         {/* <IconButton
           size="large"
           aria-label="light or night"

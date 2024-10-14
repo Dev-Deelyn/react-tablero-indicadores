@@ -1,14 +1,14 @@
 import { Icon } from '@iconify/react'
-import { Box, Card, CardContent, Link, Typography } from '@mui/material'
+import { Card, CardContent, Link, Typography } from '@mui/material'
 import React from 'react'
 import IndicatorRoutes from 'types/IndicatorRoutes.types'
 import { Link as RouterLink } from 'react-router-dom'
 
-interface SectionCardProps extends IndicatorRoutes { }
+// interface SectionCardProps extends IndicatorRoutes { }
 
 const baseIcon = 'ri:table-fill'
 
-const SectionCard: React.FC<SectionCardProps> = (props) => {
+const SectionCard: React.FC<IndicatorRoutes> = (props) => {
   return (
     <Link underline='none' component={RouterLink} to={props.path ?? '/'}>
       <Card sx={{ height: 180 }}>

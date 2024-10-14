@@ -13,7 +13,7 @@ export const loguedRoutes = createBrowserRouter([
   {
     path: '/', element: <Root />, children: [
       { index: true, element: <Navigate to={'/main'} /> },
-      { path: 'main', element: <Indexer routes={indexerRoutes} /> },
+      { path: 'main', element: <Indexer title="General" routes={indexerRoutes} /> },
       ...saludRoutes
     ],
   },

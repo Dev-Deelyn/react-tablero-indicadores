@@ -1,6 +1,8 @@
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import SectionCard from 'components/common/SectionCard'
+import NavbarContext from 'contexts/NavbarContext';
+import { useContext, useEffect } from 'react';
 import IndicatorRoutes from 'types/IndicatorRoutes.types'
 
 interface IndexerProps {
@@ -9,6 +11,14 @@ interface IndexerProps {
 }
 
 const Indexer: React.FC<IndexerProps> = (props) => {
+  const { changeNavTitle } = useContext(NavbarContext);
+
+  useEffect(() => {
+    if (props.title) {
+      changeNavTitle(`Indexador ${props.title}`)
+    }
+  }, [])
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={5}>
