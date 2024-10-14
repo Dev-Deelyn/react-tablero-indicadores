@@ -10,15 +10,15 @@ const SidebarItems = () => {
   return (
     <List>
       <ListItem disablePadding>
-        <ListItemButton selected={location.pathname === AppRoutesSidebar.CLIPPING} onClick={() => navigate(AppRoutesSidebar.CLIPPING)}>
+        <ListItemButton selected={location.pathname === AppRoutesSidebar.HOME} onClick={() => navigate(AppRoutesSidebar.HOME)}>
           <ListItemIcon><ArticleIcon /></ListItemIcon>
-          <Typography fontSize={18}>SALUD</Typography>
+          <Typography fontSize={18}>INDEX</Typography>
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
-        <ListItemButton selected={location.pathname === AppRoutesSidebar.CLIPPING} onClick={() => navigate(AppRoutesSidebar.CLIPPING)}>
+        <ListItemButton selected={location.pathname === AppRoutesSidebar.SALUD} onClick={() => navigate(AppRoutesSidebar.SALUD)}>
           <ListItemIcon><ArticleIcon /></ListItemIcon>
-          <Typography fontSize={18}>EDUCACION</Typography>
+          <Typography fontSize={18}>SALUD</Typography>
         </ListItemButton>
       </ListItem>
     </List>
