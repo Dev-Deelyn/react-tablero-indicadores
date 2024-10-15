@@ -1,9 +1,9 @@
-import { ReactElement } from "react";
+// import { ReactElement } from "react";
 
 export default interface IndicatorRoutes {
   path: string;
   title: string;
-  content?: ReactElement;
+  content?: JSX.Element;
   shortTitle?: string;
   icon?: string;
   show?: boolean;

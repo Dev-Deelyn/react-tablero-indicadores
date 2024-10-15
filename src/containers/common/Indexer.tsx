@@ -10,14 +10,14 @@ interface IndexerProps {
   routes: IndicatorRoutes[];
 }
 
+const headTitle = 'indice tablero de'
+
 const Indexer: React.FC<IndexerProps> = (props) => {
   const { changeNavTitle } = useContext(NavbarContext);
 
   useEffect(() => {
-    if (props.title) {
-      changeNavTitle(`Indexador ${props.title}`)
-    }
-  }, [])
+    changeNavTitle(props.title ? `${headTitle} ${props.title}` : '')
+  }, [props.title])
 
   return (
     <Box sx={{ flexGrow: 1 }}>

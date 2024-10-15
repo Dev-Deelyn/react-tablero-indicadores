@@ -1,20 +1,22 @@
 import Root from "containers/root";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import saludRoutes from "./salud.routes";
 import IndicatorRoutes from "types/IndicatorRoutes.types";
 import Indexer from "containers/common/Indexer";
+import saludRoutes, { saludIndicatorRoute } from "./salud.routes";
+import educacionRoutes, { educacionIndicatorRoute } from "./educacion.routes";
 
 const indexerRoutes: IndicatorRoutes[] = [
-  { path: '/salud', icon: 'mdi:heart', title: 'salud' },
-  { path: '/salud', icon: 'material-symbols:school', title: 'educación' },
+  saludIndicatorRoute,
+  educacionIndicatorRoute,
 ];
 
 export const loguedRoutes = createBrowserRouter([
   {
     path: '/', element: <Root />, children: [
       { index: true, element: <Navigate to={'/main'} /> },
-      { path: 'main', element: <Indexer title="General" routes={indexerRoutes} /> },
-      ...saludRoutes
+      { path: 'main', element: <Indexer title="indicadores provinciales" routes={indexerRoutes} /> },
+      ...saludRoutes,
+      ...educacionRoutes
     ],
   },
   {

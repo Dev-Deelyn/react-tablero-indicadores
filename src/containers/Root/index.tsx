@@ -26,7 +26,7 @@ const Root = () => {
         <CssBaseline />
         <NavBar open={open} handleOpen={handleDrawerOpen} />
         <Sidebar theme={theme} open={open} handleClose={handleDrawerClose} />
-        <Main open={open}>
+        <Main sx={{ backgroundColor: '#EEEEEE' }} open={open}>
           <Outlet />
         </Main>
       </Box>

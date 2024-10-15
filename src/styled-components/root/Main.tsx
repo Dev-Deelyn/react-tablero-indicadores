@@ -5,7 +5,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   // backgroundColor: 'red',
-  // height: '100vh',
+  height: '100vh',
   flexGrow: 1,
   padding: theme.spacing(3),
   paddingTop: theme.spacing(11),

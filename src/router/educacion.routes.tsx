@@ -4,19 +4,19 @@ import IndicadoresGenerales from "containers/salud/IndicadoresGenerales";
 import { RouteObject } from "react-router-dom";
 import IndicatorRoutes from "types/IndicatorRoutes.types";
 
-const routePath = 'salud';
-const routeTitle = 'salud';
-const routeIcon = 'mdi:heart';
+const routePath = 'educacion';
+const routeTitle = 'educación';
+const routeIcon = 'material-symbols:school';
 
 const routes: IndicatorRoutes[] = [
-  { path: 'indicadores-generales', icon: 'mdi:heart', title: 'indicadores generales', content: <IndicadoresGenerales /> }
+  { path: 'indicadores-generales', icon: routeIcon, title: 'indicadores generales', content: <IndicadoresGenerales /> }
 ];
 
 const indexedRoutes: RouteObject[] = routes.map(route =>
   ({ path: route.path, element: <IndicatorContainer children={route.content} title={route.title} /> })
 );
 
-const saludRoutes: RouteObject[] = [
+const educacionRoutes: RouteObject[] = [
   {
     path: routePath, children: [
       { index: true, element: <Indexer title={routeTitle} routes={routes} /> },
@@ -25,10 +25,10 @@ const saludRoutes: RouteObject[] = [
   }
 ]
 
-export const saludIndicatorRoute: IndicatorRoutes = {
+export const educacionIndicatorRoute: IndicatorRoutes = {
   path: `/${routePath}`,
   icon: routeIcon,
   title: routeTitle
 };
 
-export default saludRoutes;
+export default educacionRoutes;

@@ -25,7 +25,7 @@ const NavBar = ({ open, handleOpen }: propTypes) => {
         <IconButton color="inherit" onClick={handleOpen} edge="start" sx={{ mr: 2, ...(open && { display: 'none' }) }}>
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" textTransform='uppercase' noWrap component="div" sx={{ flexGrow: 1 }} >{navbarContext.navTitle ?? 'TABLERO INDICADORES'}</Typography>
+        <Typography variant="h6" textTransform='uppercase' fontWeight='bold' noWrap component="div" sx={{ flexGrow: 1 }} >{navbarContext.navTitle ?? 'TABLERO INDICADORES'}</Typography>
         {/* <IconButton
           size="large"
           aria-label="light or night"
