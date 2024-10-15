@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Drawer from '@mui/material/Drawer';
-import DrawerHeader from 'styled-components/DrawerHeader';
+import DrawerHeader from 'styled-components/root/DrawerHeader';
 import { drawerWidth } from 'config/constants';
 import { Theme } from '@mui/material';
 import SidebarItems from './SidebarItems';

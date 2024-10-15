@@ -1,12 +1,14 @@
 import { styled } from '@mui/material/styles';
-import { drawerWidth } from '../config/constants';
+import { drawerWidth } from '../../config/constants';
 
-export default styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
+  // backgroundColor: 'red',
+  height: '100vh',
   flexGrow: 1,
   padding: theme.spacing(3),
-  paddingTop: theme.spacing(7),
+  paddingTop: theme.spacing(11),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -20,3 +22,5 @@ export default styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<
     marginLeft: 0,
   }),
 }));
+
+export default Main
