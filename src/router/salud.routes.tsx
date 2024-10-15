@@ -4,7 +4,7 @@ import { createMainRoute, createRouterRoutes } from "utils/common/roterUtils";
 
 const routePath = 'salud';
 const routeTitle = 'salud';
-const routeIcon = 'bxs:donate-heart';
+const routeIcon = 'fa-regular:hospital';
 
 const routes: IndicatorRoutes[] = [
   { path: 'tasas-generales-salud', icon: routeIcon, title: 'tasas generales de salud', content: <BaseSection content="tasas generales de salud" /> },
