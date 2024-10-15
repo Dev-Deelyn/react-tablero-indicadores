@@ -5,7 +5,7 @@ import IndicatorRoutes from 'types/IndicatorRoutes.types';
 import { baseIconIconify } from 'config/constants';
 
 interface SectionNavItemProps extends IndicatorRoutes {
-  location: Location<any>;
+  location: Location;
   navigate: NavigateFunction;
 }
 

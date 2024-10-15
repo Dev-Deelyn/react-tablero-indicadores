@@ -7,7 +7,7 @@ interface BaseSectionProps {
 
 const BaseSection: React.FC<BaseSectionProps> = (props) => {
   return (
-    <Typography variant='h4'>{props.content}</Typography>
+    <Typography variant='h4' textTransform='uppercase'>{props.content}</Typography>
   )
 }
 
