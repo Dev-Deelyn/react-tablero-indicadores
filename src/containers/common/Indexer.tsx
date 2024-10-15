@@ -26,7 +26,7 @@ const Indexer: React.FC<IndexerProps> = (props) => {
         {
           props.routes.map((route, index) => (
             <Grid size={2}>
-              <SectionCard {...route} transitionDelay={(index + 1) * cardTransitionDelay} />
+              <SectionCard key={`sectioncard-${route.title}-${index}`} {...route} transitionDelay={(index + 1) * cardTransitionDelay} />
             </Grid>
           ))
         }

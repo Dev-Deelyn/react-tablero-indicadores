@@ -5,15 +5,7 @@ import Indexer from "containers/common/Indexer";
 import saludRoutes, { saludIndicatorRoute } from "./salud.routes";
 import educacionRoutes, { educacionIndicatorRoute } from "./educacion.routes";
 
-const indexerRoutes: IndicatorRoutes[] = [
-  saludIndicatorRoute,
-  saludIndicatorRoute,
-  saludIndicatorRoute,
-  saludIndicatorRoute,
-  saludIndicatorRoute,
-  saludIndicatorRoute,
-  saludIndicatorRoute,
-  saludIndicatorRoute,
+export const indexerRoutes: IndicatorRoutes[] = [
   saludIndicatorRoute,
   educacionIndicatorRoute,
 ];
