@@ -7,6 +7,14 @@ import educacionRoutes, { educacionIndicatorRoute } from "./educacion.routes";
 
 const indexerRoutes: IndicatorRoutes[] = [
   saludIndicatorRoute,
+  saludIndicatorRoute,
+  saludIndicatorRoute,
+  saludIndicatorRoute,
+  saludIndicatorRoute,
+  saludIndicatorRoute,
+  saludIndicatorRoute,
+  saludIndicatorRoute,
+  saludIndicatorRoute,
   educacionIndicatorRoute,
 ];
 

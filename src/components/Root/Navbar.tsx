@@ -17,7 +17,6 @@ interface propTypes {
 
 const NavBar = ({ open, handleOpen }: propTypes) => {
   const navbarContext = useContext(NavbarContext);
-  console.log(navbarContext);
 
   return (
     <AppBar position="fixed" style={navbarBackground} open={open} >

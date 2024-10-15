@@ -11,6 +11,7 @@ interface IndexerProps {
 }
 
 const headTitle = 'indice tablero de'
+const cardTransitionDelay = 100;
 
 const Indexer: React.FC<IndexerProps> = (props) => {
   const { changeNavTitle } = useContext(NavbarContext);
@@ -23,9 +24,9 @@ const Indexer: React.FC<IndexerProps> = (props) => {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={5}>
         {
-          props.routes.map(route => (
+          props.routes.map((route, index) => (
             <Grid size={2}>
-              <SectionCard {...route} />
+              <SectionCard {...route} transitionDelay={(index + 1) * cardTransitionDelay} />
             </Grid>
           ))
         }
