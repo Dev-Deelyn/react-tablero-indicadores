@@ -11,7 +11,7 @@ interface IndexerProps {
 }
 
 const headTitle = 'indice tablero de'
-const cardTransitionDelay = 100;
+const cardTransitionDelay = 60;
 
 const Indexer: React.FC<IndexerProps> = (props) => {
   const { changeNavTitle } = useContext(NavbarContext);

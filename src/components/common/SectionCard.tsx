@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { Card, CardContent, Fade, Grow, Link, Typography, Zoom } from '@mui/material'
+import { Card, CardContent, Link, Typography, Zoom } from '@mui/material'
 import React from 'react'
 import IndicatorRoutes from 'types/IndicatorRoutes.types'
 import { Link as RouterLink } from 'react-router-dom'
