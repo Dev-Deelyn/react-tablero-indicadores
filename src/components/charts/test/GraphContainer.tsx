@@ -9,6 +9,7 @@ interface GraphContainerProps {
   dataset: Array<{ [key: string]: number | string }>;
   dimensions: string;
   metrics: string[];
+  chartType: 'line' | 'bar'; // Añadir prop para tipo de gráfico
   text?: string;
   textColor?: string;
   textBold?: boolean;
@@ -24,6 +25,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   dataset,
   dimensions,
   metrics,
+  chartType, // Recibir prop para tipo de gráfico
   text = '',
   textColor = 'black',
   textBold = false,
@@ -31,7 +33,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   textSize = '16px',
   textAlign = 'left',
 }) => {
-  const data = dimensions && metrics.length ? transformData(dataset, dimensions, metrics) : null;
+  const data = dimensions && metrics.length ? transformData(dataset, dimensions, metrics, chartType) : null;
 
   return (
     <div

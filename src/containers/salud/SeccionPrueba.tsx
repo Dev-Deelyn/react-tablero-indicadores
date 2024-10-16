@@ -13,6 +13,7 @@ const SeccionPrueba = () => {
         dataset={indicadores_tasas}
         dimensions="AÑO"
         metrics={["TASA DE NATALIDAD", "TASA DE MORTALIDAD GENERAL", "TASA DE MORTALIDAD INFANTIL", "TASA DE MORTALIDAD MATERNA"]}
+        chartType="line" // Especificar el tipo de gráfico
         text="Mi Gráfico"
         textColor="blue"
         textBold

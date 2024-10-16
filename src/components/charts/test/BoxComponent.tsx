@@ -5,6 +5,7 @@ interface BoxComponentProps {
   dataset: Array<{ [key: string]: number | string }>;
   dimensions: string;
   metrics: string[];
+  chartType: 'line' | 'bar'; // Añadir prop para tipo de gráfico
   text?: string;
   textColor?: string;
   textBold?: boolean;
@@ -17,6 +18,7 @@ const BoxComponent: React.FC<BoxComponentProps> = ({
   dataset,
   dimensions,
   metrics,
+  chartType, // Recibir prop para tipo de gráfico
   text = '',
   textColor = 'black',
   textBold = false,
@@ -30,6 +32,7 @@ const BoxComponent: React.FC<BoxComponentProps> = ({
         dataset={dataset}
         dimensions={dimensions}
         metrics={metrics}
+        chartType={chartType} // Pasar prop para tipo de gráfico
         text={text}
         textColor={textColor}
         textBold={textBold}
