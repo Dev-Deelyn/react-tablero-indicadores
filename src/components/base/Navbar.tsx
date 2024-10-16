@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 // import LightModeIcon from '@mui/icons-material/LightMode';
 // import DarkModeIcon from '@mui/icons-material/DarkMode';
 import MenuIcon from '@mui/icons-material/Menu';
-import AppBar from 'styled-components/root/AppBar';
+import AppBar from 'styled-components/base/AppBar';
 import { navbarBackground } from 'config/constants';
 import UserMenu from './UserMenu';
 import { useContext } from 'react';
