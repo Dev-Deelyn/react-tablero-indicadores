@@ -33,6 +33,7 @@
       "hooks/*": ["./hooks/*"],
       "contexts/*": ["./contexts/*"],
       "types/*": ["./types/*"],
+      "utils/*": ["./utils/*"],
     }
   },
   "include": ["src","types"]
