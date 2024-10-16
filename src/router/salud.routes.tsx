@@ -8,7 +8,7 @@ const routeTitle = 'salud';
 const routeIcon = 'fa-regular:hospital';
 
 const routes: IndicatorRoutes[] = [
-  { path: 'seccion-prueba', icon: routeIcon, title: 'Seccion de Prueba', content: <SeccionPrueba /> }
+  { path: 'seccion-prueba', icon: routeIcon, title: 'Seccion de Prueba', content: <SeccionPrueba /> },
   { path: 'tasas-generales-salud', icon: routeIcon, title: 'tasas generales de salud', content: <BaseSection content="tasas generales de salud" /> },
   { path: 'indicadores-detallado', icon: routeIcon, title: 'indicadores detallado', content: <BaseSection content="indicadores detallado" /> },
   { path: 'mortalidad-infantil', icon: routeIcon, title: 'mortalidad infantil', content: <BaseSection content="mortalidad infantil" /> },
