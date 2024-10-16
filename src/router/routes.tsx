@@ -1,4 +1,4 @@
-import Root from "containers/root";
+import Base from "containers/base";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import IndicatorRoutes from "types/IndicatorRoutes.types";
 import Indexer from "containers/common/Indexer";
@@ -12,7 +12,7 @@ export const indexerRoutes: IndicatorRoutes[] = [
 
 export const loguedRoutes = createBrowserRouter([
   {
-    path: '/', element: <Root />, children: [
+    path: '/', element: <Base />, children: [
       { index: true, element: <Navigate to={'/main'} /> },
       { path: 'main', element: <Indexer title="indicadores provinciales" routes={indexerRoutes} /> },
       ...saludRoutes,

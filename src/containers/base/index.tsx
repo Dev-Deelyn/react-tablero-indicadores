@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Box, CssBaseline } from '@mui/material'
 import { useTheme } from '@mui/material/styles';
-import Main from 'styled-components/root/Main';
-import NavBar from 'components/root/Navbar';
+import Main from 'styled-components/base/Main';
+import NavBar from 'components/base/Navbar';
 import { Outlet } from 'react-router-dom'
-import Sidebar from 'components/root/Sidebar';
+import Sidebar from 'components/base/Sidebar';
 import { NavbarContextProvider } from 'contexts/NavbarContext';
 
-const Root = () => {
+const Base = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   const theme = useTheme();
@@ -34,4 +34,4 @@ const Root = () => {
   )
 }
 
-export default Root
+export default Base
