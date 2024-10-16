@@ -1,4 +1,5 @@
 import BaseSection from "containers/common/BaseSection";
+import GraficoDePrueba from "containers/salud/GraficoDePrueba";
 import IndicatorRoutes from "types/IndicatorRoutes.types";
 import { createMainRoute, createRouterRoutes } from "utils/common/roterUtils";
 
@@ -26,6 +27,7 @@ const routes: IndicatorRoutes[] = [
   // { path: 'informe-vacunados-dengue', icon: routeIcon, title: 'informe vacunados - vacunas dengue', content: <BaseSection content="informe vacunados - vacunas dengue" /> },
   // { path: 'informe-vacunados-covid19', icon: routeIcon, title: 'informe vacunados - vacunas covid-19', content: <BaseSection content="informe vacunados - vacunas covid-19" /> },
   // { path: 'vacunas-calendario', icon: routeIcon, title: 'vacunas calendario', content: <BaseSection content="vacunas calendario" /> },
+  { path: 'grafico-de-prueba', icon: routeIcon, title: 'grafico de prueba', content: <GraficoDePrueba /> },
 ];
 
 const saludRoutes = createRouterRoutes(routePath, routeTitle, routes);
