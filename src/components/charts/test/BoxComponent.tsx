@@ -1,8 +1,8 @@
 import React from 'react';
 import GraphContainer from './GraphContainer';
-import { indicadores_tasas } from '../../../utils/exampleDatasets';
 
 interface BoxComponentProps {
+  dataset: Array<{ [key: string]: number | string }>;
   dimensions: string;
   metrics: string[];
   text?: string;
@@ -14,6 +14,7 @@ interface BoxComponentProps {
 }
 
 const BoxComponent: React.FC<BoxComponentProps> = ({
+  dataset,
   dimensions,
   metrics,
   text = '',
@@ -26,7 +27,7 @@ const BoxComponent: React.FC<BoxComponentProps> = ({
   return (
     <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)' }}>
       <GraphContainer
-        dataset={indicadores_tasas}
+        dataset={dataset}
         dimensions={dimensions}
         metrics={metrics}
         text={text}

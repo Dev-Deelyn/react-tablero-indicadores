@@ -1,7 +1,7 @@
-// import React from 'react';
+import React from 'react';
 import { Container, Typography } from '@mui/material';
 import BoxComponent from "components/charts/test/BoxComponent";
-// import { indicadores_tasas } from "utils/exampleDatasets";
+import { indicadores_tasas } from "utils/exampleDatasets"; // Importamos aquí el dataset específico
 
 const SeccionPrueba = () => {
   return (
@@ -10,6 +10,7 @@ const SeccionPrueba = () => {
         Gráfico con Datos Dinámicos
       </Typography>
       <BoxComponent
+        dataset={indicadores_tasas}
         dimensions="AÑO"
         metrics={["TASA DE NATALIDAD", "TASA DE MORTALIDAD GENERAL", "TASA DE MORTALIDAD INFANTIL", "TASA DE MORTALIDAD MATERNA"]}
         text="Mi Gráfico"
