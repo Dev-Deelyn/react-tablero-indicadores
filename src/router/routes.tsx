@@ -1,5 +1,5 @@
-import Root from "containers/root";
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import Root from "containers/root/index";
 import IndicatorRoutes from "types/IndicatorRoutes.types";
 import Indexer from "containers/common/Indexer";
 import saludRoutes, { saludIndicatorRoute } from "./salud.routes";

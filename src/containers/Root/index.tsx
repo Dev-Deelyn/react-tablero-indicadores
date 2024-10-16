@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Box, CssBaseline } from '@mui/material'
 import { useTheme } from '@mui/material/styles';
 import Main from 'styled-components/root/Main';
-import NavBar from 'components/root/Navbar';
 import { Outlet } from 'react-router-dom'
-import Sidebar from 'components/root/Sidebar';
 import { NavbarContextProvider } from 'contexts/NavbarContext';
+import NavBar from 'components/root/Navbar';
+import Sidebar from 'components/root/Sidebar';
 
 const Root = () => {
   const [open, setOpen] = useState<boolean>(false);
