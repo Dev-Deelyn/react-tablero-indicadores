@@ -1,3 +1,5 @@
+// GraphContainer.tsx
+
 import React, { ReactNode } from 'react';
 import LineChart from './LineChart';
 import { transformData } from '../../../utils/transformData';
@@ -7,9 +9,10 @@ interface GraphContainerProps {
   width?: string;
   height?: string;
   dataset: Array<{ [key: string]: number | string }>;
-  dimensions: string;
+  dimension: string;
+  splitBy?: string | null;
   metrics: string[];
-  chartType: 'line' | 'bar'; // Añadir prop para tipo de gráfico
+  chartType: 'line' | 'bar';
   text?: string;
   textColor?: string;
   textBold?: boolean;
@@ -21,11 +24,12 @@ interface GraphContainerProps {
 const GraphContainer: React.FC<GraphContainerProps> = ({
   children,
   width = '100%',
-  height = '600px',
+  height = '300px',
   dataset,
-  dimensions,
+  dimension,
+  splitBy = null,
   metrics,
-  chartType, // Recibir prop para tipo de gráfico
+  chartType,
   text = '',
   textColor = 'black',
   textBold = false,
@@ -33,13 +37,14 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   textSize = '16px',
   textAlign = 'left',
 }) => {
-  const data = dimensions && metrics.length ? transformData(dataset, dimensions, metrics, chartType) : null;
+  const data = dimension && metrics.length ? transformData(dataset, dimension, splitBy, metrics, chartType) : null;
+  console.log(data);
 
   return (
     <div
       style={{
-        height: height,
-        width: width,
+        height,
+        width,
         border: '1px solid #ccc',
         borderRadius: '10px',
         boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',

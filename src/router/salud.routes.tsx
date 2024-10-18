@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+import Indexer from "containers/common/Indexer";
+import IndicatorContainer from "containers/common/IndicatorContainer";
+import GuardiasLiquidadas from "containers/salud/GuardiasLiquidadas";
+import IndicadoresGenerales from "containers/salud/IndicadoresGenerales";
+>>>>>>> 03187a3 (Desglose de dimensiones resuelto - Gráficos más dinámicos)
 import SeccionPrueba from "containers/salud/SeccionPrueba";
 import BaseSection from "containers/common/BaseSection";
 import IndicatorRoutes from "types/IndicatorRoutes.types";
@@ -8,6 +15,7 @@ const routeTitle = 'salud';
 const routeIcon = 'fa-regular:hospital';
 
 const routes: IndicatorRoutes[] = [
+<<<<<<< HEAD
   { path: 'seccion-prueba', icon: routeIcon, title: 'Seccion de Prueba', content: <SeccionPrueba /> },
   { path: 'tasas-generales-salud', icon: routeIcon, title: 'tasas generales de salud', content: <BaseSection content="tasas generales de salud" /> },
   { path: 'indicadores-detallado', icon: routeIcon, title: 'indicadores detallado', content: <BaseSection content="indicadores detallado" /> },
@@ -28,6 +36,11 @@ const routes: IndicatorRoutes[] = [
   // { path: 'informe-vacunados-dengue', icon: routeIcon, title: 'informe vacunados - vacunas dengue', content: <BaseSection content="informe vacunados - vacunas dengue" /> },
   // { path: 'informe-vacunados-covid19', icon: routeIcon, title: 'informe vacunados - vacunas covid-19', content: <BaseSection content="informe vacunados - vacunas covid-19" /> },
   // { path: 'vacunas-calendario', icon: routeIcon, title: 'vacunas calendario', content: <BaseSection content="vacunas calendario" /> },
+=======
+  { path: 'indicadores-generales', icon: 'mdi:heart', title: 'indicadores generales', content: <IndicadoresGenerales /> },
+  { path: 'seccion-prueba', icon: routeIcon, title: 'Seccion de Prueba', content: <SeccionPrueba /> },
+  { path: 'guardias-liquidadas', icon: routeIcon, title: 'Guardias liquidadas', content: <GuardiasLiquidadas /> }
+>>>>>>> 03187a3 (Desglose de dimensiones resuelto - Gráficos más dinámicos)
 ];
 
 const saludRoutes = createRouterRoutes(routePath, routeTitle, routes);
