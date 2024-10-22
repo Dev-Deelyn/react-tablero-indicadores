@@ -1,7 +1,6 @@
-// GraphContainer.tsx
-
 import React, { ReactNode } from 'react';
 import LineChart from './LineChart';
+import BarChart from './BarChart';
 import { transformData } from '../../../utils/transformData';
 
 interface GraphContainerProps {
@@ -13,6 +12,7 @@ interface GraphContainerProps {
   splitBy?: string | null;
   metrics: string[];
   chartType: 'line' | 'bar';
+  orderBy?: [string, 'count' | 'value' | 'alph', 'asc' | 'desc'];
   text?: string;
   textColor?: string;
   textBold?: boolean;
@@ -30,6 +30,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   splitBy = null,
   metrics,
   chartType,
+  orderBy,
   text = '',
   textColor = 'black',
   textBold = false,
@@ -37,7 +38,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   textSize = '16px',
   textAlign = 'left',
 }) => {
-  const data = dimension && metrics.length ? transformData(dataset, dimension, splitBy, metrics, chartType) : null;
+  const data = dimension && metrics.length ? transformData(dataset, dimension, splitBy, metrics, chartType, orderBy) : null;
   console.log(data);
 
   return (
@@ -65,7 +66,11 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
       >
         {text}
       </div>
-      <LineChart height={height} width={width} data={data} />
+      {chartType === 'line' ? (
+        <LineChart height={height} width={width} data={data} orderBy={orderBy} />
+      ) : (
+        <BarChart height={height} width={width} data={data} orderBy={orderBy} />
+      )}
       {children}
     </div>
   );

@@ -1,5 +1,3 @@
-// utils/transformData.ts
-
 interface Dataset {
   [key: string]: number | string;
 }
@@ -14,10 +12,10 @@ export const transformData = (
   dimension: string,
   splitBy: string | null,
   metrics: string[],
-  chartType: 'line' | 'bar'
+  chartType: 'line' | 'bar',
+  orderBy?: [string, 'count' | 'value' | 'alph', 'asc' | 'desc']
 ): TransformedData => {
-  const categories = Array.from(new Set(data.map(item => item[dimension].toString())));
-  console.log('Categories:', categories); // Verificar las categorías
+  let categories = Array.from(new Set(data.map(item => item[dimension].toString())));
   let series = [];
 
   if (splitBy) {
@@ -26,7 +24,6 @@ export const transformData = (
       type: chartType,
       data: categories.map(category => {
         const items = data.filter(d => d[dimension].toString() === category && d[splitBy].toString() === splitValue);
-        console.log('Items for', splitValue, 'in', category, ':', items); // Verificar los ítems
         return items.length ? items.reduce((sum, item) => sum + (item[metrics[0]] as number), 0) : 0;
       })
     }));
@@ -36,12 +33,44 @@ export const transformData = (
       type: chartType,
       data: categories.map(category => {
         const item = data.find(d => d[dimension].toString() === category);
-        console.log('Item for', metric, 'in', category, ':', item); // Verificar el ítem
         return item ? item[metric] as number : 0;
       })
     }));
   }
 
-  console.log('Series:', series); // Verificar las series
+  if (orderBy) {
+    const [orderField, orderFilter, orderType] = orderBy;
+
+    const sortOrder = (a: number | string, b: number | string) =>
+      orderType === 'asc' ? a > b ? 1 : -1 : a < b ? 1 : -1;
+
+    if (orderFilter === 'alph') {
+      categories.sort((a, b) => sortOrder(a, b));
+    } else if (orderFilter === 'count') {
+      const categoryCounts = categories.map(category =>
+        data.filter(item => item[dimension].toString() === category).length
+      );
+      categories = categories
+        .map((category, index) => ({ category, count: categoryCounts[index] }))
+        .sort((a, b) => sortOrder(a.count, b.count))
+        .map(item => item.category);
+    } else if (orderFilter === 'value') {
+      const valueIndex = metrics.indexOf(orderField);
+      const valueCounts = series[valueIndex]?.data || [];
+      categories = categories
+        .map((category, index) => ({ category, value: valueCounts[index] }))
+        .sort((a, b) => sortOrder(a.value, b.value))
+        .map(item => item.category);
+    }
+
+    series.forEach(serie => {
+      const sortedDataArray = categories.map(category => {
+        const index = data.findIndex(item => item[dimension].toString() === category);
+        return index > -1 ? serie.data[index] : 0;
+      });
+      serie.data = sortedDataArray;
+    });
+  }
+
   return { categories, series };
 };

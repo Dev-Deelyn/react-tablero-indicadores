@@ -21,6 +21,7 @@ const SeccionPrueba = () => {
             textBold
             textSize="15px"
             textAlign="center"
+            orderBy={['AÑO', 'alph', 'asc']}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -34,6 +35,7 @@ const SeccionPrueba = () => {
             textBold
             textSize="15px"
             textAlign="center"
+            orderBy={['AÑO', 'alph', 'asc']}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -48,6 +50,7 @@ const SeccionPrueba = () => {
             textBold
             textSize="15px"
             textAlign="center"
+            orderBy={['AÑO', 'alph', 'asc']}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -61,6 +64,7 @@ const SeccionPrueba = () => {
             textBold
             textSize="15px"
             textAlign="center"
+            orderBy={['AÑO', 'alph', 'asc']}
           />
         </Grid>
       </BoxComponent>
