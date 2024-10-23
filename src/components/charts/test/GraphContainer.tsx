@@ -21,6 +21,7 @@ interface GraphContainerProps {
   textItalic?: boolean;
   textSize?: string;
   textAlign?: 'left' | 'center' | 'right';
+  seriesName?: string;
 }
 
 const GraphContainer: React.FC<GraphContainerProps> = ({
@@ -39,6 +40,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   textItalic = false,
   textSize = '16px',
   textAlign = 'left',
+  seriesName,
 }) => {
   const data = dimension && metrics.length ? transformData(dataset, dimension, splitBy, metrics, chartType, orderBy) : null;
   console.log(data);
@@ -70,7 +72,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
       </div>
       {chartType === 'line' && <LineChart height={height} width={width} data={data as { categories: string[], series: { name: string, type: 'line', data: number[] }[] }} orderBy={orderBy} />}
       {chartType === 'bar' && <BarChart height={height} width={width} data={data as { categories: string[], series: { name: string, type: 'bar', data: number[] }[] }} orderBy={orderBy} />}
-      {chartType === 'pie' && <PieChart height={height} width={width} data={data ? data.series[0].data.map((value, index) => ({ name: data.categories[index], value })) : null} seriesName={metrics[0]} />} 
+      {chartType === 'pie' && <PieChart height={height} width={width} data={data ? data.series[0].data.map((value, index) => ({ name: data.categories[index], value })) : null} seriesName={seriesName || metrics[0]} />} 
       {children}
     </div>
   );

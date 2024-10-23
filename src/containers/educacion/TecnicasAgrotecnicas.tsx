@@ -32,6 +32,7 @@ const TecnicasAgrotecnicas = () => {
             textBold
             textSize="15px"
             textAlign="center"
+            
           />
         </Grid>
       </BoxComponent>
