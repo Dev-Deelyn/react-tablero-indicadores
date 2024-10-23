@@ -1,13 +1,11 @@
+// BarChart.tsx
 import React from 'react';
-import { EChart, EChartProps } from '@kbox-labs/react-echarts';
+import { EChart } from '@kbox-labs/react-echarts';
 
 interface BarChartProps {
   height?: string;
   width?: string;
-  data: {
-    categories: string[],
-    series: Array<{ name: string, type: 'line' | 'bar', data: number[] }>
-  } | null;
+  data: { categories: string[], series: { name: string, type: 'bar', data: number[] }[] } | null;
   orderBy?: [string, 'count' | 'value' | 'alph', 'asc' | 'desc'];
 }
 
@@ -15,7 +13,7 @@ const BarChart: React.FC<BarChartProps> = ({ height = '100%', width = '100%', da
   if (!data) {
     return <div style={{ height, width }}>No data to display</div>;
   }
-
+  console.log(data)
   return (
     <EChart
       style={{ height, width }}

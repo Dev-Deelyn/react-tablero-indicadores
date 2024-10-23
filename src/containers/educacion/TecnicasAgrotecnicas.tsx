@@ -25,9 +25,9 @@ const TecnicasAgrotecnicas = () => {
           <GraphContainer
             dataset={tecnicasAgrotecnicasDatasets}
             dimension="ESTABLECIMIENTO"
-            metrics={['DOCENTES', 'ADMINISTRATIVO', 'AUTORIDADES']}
-            chartType="bar"
-            text="PERSONAL POR ESTABLECIMIENTO"
+            metrics={['MATRICULA']}
+            chartType="pie"
+            text="MATRÍCULA POR ESTABLECIMIENTO"
             textColor="black"
             textBold
             textSize="15px"

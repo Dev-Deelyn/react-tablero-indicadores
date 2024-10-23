@@ -1,6 +1,8 @@
+// GraphContainer.tsx
 import React, { ReactNode } from 'react';
 import LineChart from './LineChart';
 import BarChart from './BarChart';
+import PieChart from './PieChart';
 import { transformData } from '../../../utils/transformData';
 
 interface GraphContainerProps {
@@ -11,7 +13,7 @@ interface GraphContainerProps {
   dimension: string;
   splitBy?: string | null;
   metrics: string[];
-  chartType: 'line' | 'bar';
+  chartType: 'line' | 'bar' | 'pie';
   orderBy?: [string, 'count' | 'value' | 'alph', 'asc' | 'desc'];
   text?: string;
   textColor?: string;
@@ -66,11 +68,9 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
       >
         {text}
       </div>
-      {chartType === 'line' ? (
-        <LineChart height={height} width={width} data={data} orderBy={orderBy} />
-      ) : (
-        <BarChart height={height} width={width} data={data} orderBy={orderBy} />
-      )}
+      {chartType === 'line' && <LineChart height={height} width={width} data={data as { categories: string[], series: { name: string, type: 'line', data: number[] }[] }} orderBy={orderBy} />}
+      {chartType === 'bar' && <BarChart height={height} width={width} data={data as { categories: string[], series: { name: string, type: 'bar', data: number[] }[] }} orderBy={orderBy} />}
+      {chartType === 'pie' && <PieChart height={height} width={width} data={data ? data.series[0].data.map((value, index) => ({ name: data.categories[index], value })) : null} seriesName={metrics[0]} />} 
       {children}
     </div>
   );
