@@ -16,8 +16,9 @@ export const loguedRoutes = createBrowserRouter([
   {
     path: '/', element: <Base />, children: [
       { index: true, element: <Navigate to={'/main'} /> },
+      { path: 'usuarios', element: <UserList /> },
+      { path: 'tableros', element: <UserList /> },
       { path: 'main', element: <Indexer title="indicadores provinciales" routes={indexerRoutes} /> },
-      { path: 'users', element: <UserList /> },
       ...saludRoutes,
       ...educacionRoutes
     ],

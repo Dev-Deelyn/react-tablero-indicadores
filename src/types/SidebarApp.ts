@@ -1,4 +1,6 @@
 export enum AppRoutesSidebar {
   HOME = '/',
-  SALUD = '/salud'
+  SALUD = '/salud',
+  USUARIOS = '/usuarios',
+  TABLEROS = '/tableros',
 }
