@@ -19,8 +19,10 @@ const DashboardList = () => {
   }
 
   const getUsuarios = async () => {
-    const dashboard: Dashboard[] = await getAllDashboards();
-    setListDashboard(dashboard)
+    const { data: dashboards } = await getAllDashboards();
+    if (dashboards) {
+      setListDashboard(dashboards)
+    }
   }
 
   // const refreshListUsers = () => {

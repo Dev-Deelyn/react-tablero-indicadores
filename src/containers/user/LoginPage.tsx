@@ -1,8 +1,26 @@
-import { Box, Button, TextField, Typography, Container, CssBaseline } from '@mui/material';
+import { Box, Button, TextField, Typography, Container, CssBaseline, Alert, Collapse } from '@mui/material';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { sendAuthLogin } from 'services/AuthServices';
 
 const LoginPage = () => {
-  const navigate = useNavigate()
+  const [username, setUsername] = useState<string>();
+  const [password, setPassword] = useState<string>();
+  const [error, setError] = useState<string>();
+
+  const navigate = useNavigate();
+
+  const handleSendLogin = async () => {
+    if (!!username && !!password) {
+      setError(undefined)
+      const { error, data } = await sendAuthLogin(username, password)
+      if (data) {
+        navigate('/')
+      } else {
+        setError(error)
+      }
+    }
+  }
 
   return (
     <Container
@@ -30,10 +48,12 @@ const LoginPage = () => {
           Ingresar al tablero
         </Typography>
         <TextField
-          label="Email"
+          label="Username"
           variant="outlined"
           fullWidth
           margin="normal"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
         />
         <TextField
           label="Password"
@@ -41,13 +61,18 @@ const LoginPage = () => {
           fullWidth
           margin="normal"
           type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
         />
+        <Collapse in={!!error}>
+          <Alert severity="error">{error || ''}</Alert>
+        </Collapse>
         <Button
           variant="contained"
           color="primary"
           fullWidth
           sx={{ marginTop: '1rem' }}
-          onClick={() => navigate('/')}
+          onClick={handleSendLogin}
         >
           Ingresar
         </Button>

@@ -2,13 +2,15 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import User from 'types/User';
 import React from 'react';
 
 interface TableItemsProps {
-  users: User[];
+  users?: User[];
   onClickEdit?: (item: User) => any;
   onClickDelete?: (item: User) => any;
+  onClickDashboards?: (item: User) => any;
 }
 
 const TableItems: React.FC<TableItemsProps> = (props) => {
@@ -35,7 +37,7 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.users.map((user, index) => (
+          {props?.users?.map((user, index) => (
             <TableRow key={index}>
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.email}</TableCell>
@@ -50,6 +52,12 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
                   props?.onClickDelete &&
                   <IconButton color="secondary" onClick={() => handleDelete(user)}>
                     <DeleteIcon />
+                  </IconButton>
+                }
+                {
+                  props?.onClickDashboards &&
+                  <IconButton color="secondary" onClick={() => console.log(user)}>
+                    <DashboardIcon />
                   </IconButton>
                 }
               </TableCell>

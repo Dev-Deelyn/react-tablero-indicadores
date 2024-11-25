@@ -20,8 +20,10 @@ const UserList = () => {
   }
 
   const getUsuarios = async () => {
-    const users: User[] = await getAllUsers();
-    setListUsers(users)
+    const { data } = await getAllUsers();
+    if (data) {
+      setListUsers(data)
+    }
   }
 
   const refreshListUsers = () => {
@@ -44,7 +46,7 @@ const UserList = () => {
       </Button>
 
       <UserFormModal show={open} item={selectedUser} onAccept={refreshListUsers} onClose={handleClose} />
-      <TableItems users={listUsers} onClickEdit={handleEditUser} />
+      <TableItems users={listUsers} onClickEdit={handleEditUser} onClickDashboards={() => { }} />
     </div>
   );
 };
