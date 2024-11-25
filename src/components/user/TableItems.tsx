@@ -31,6 +31,7 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
           <TableRow>
             <TableCell>Nombre</TableCell>
             <TableCell>Email</TableCell>
+            <TableCell>Tipo de usuario</TableCell>
             <TableCell align="center" width={'160px'}>Acciones</TableCell>
           </TableRow>
         </TableHead>
@@ -39,6 +40,7 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
             <TableRow key={index}>
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.email}</TableCell>
+              <TableCell>{user.profileType}</TableCell>
               <TableCell align="center">
                 {
                   props.onClickEdit &&

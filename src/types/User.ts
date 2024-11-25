@@ -13,7 +13,7 @@ class User {
   public _id?: string;
   public username: string = '';
   public email: string = '';
-  public profileType?: string = '';
+  public profileType?: 'ADMIN' | 'INVITADO';
   public token?: string;
 
   constructor(data: Partial<User>) {
