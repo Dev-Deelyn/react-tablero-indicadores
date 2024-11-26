@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemButton, ListItemIcon, Typography } from '@mui/material'
+import { Divider, List, ListItem, ListItemButton, ListItemIcon, Typography } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AppRoutesSidebar } from 'types/SidebarApp'
 import { indexerRoutes } from 'router/routes'
@@ -11,6 +11,19 @@ const SidebarItems = () => {
 
   return (
     <List>
+      <ListItem disablePadding>
+        <ListItemButton selected={location.pathname === AppRoutesSidebar.USUARIOS} onClick={() => navigate(AppRoutesSidebar.USUARIOS)}>
+          <ListItemIcon><Icon icon='tabler:category-filled' fontSize={24} /></ListItemIcon>
+          <Typography fontSize={18}>USUARIOS</Typography>
+        </ListItemButton>
+      </ListItem>
+      <ListItem disablePadding>
+        <ListItemButton selected={location.pathname === AppRoutesSidebar.TABLEROS} onClick={() => navigate(AppRoutesSidebar.TABLEROS)}>
+          <ListItemIcon><Icon icon='tabler:category-filled' fontSize={24} /></ListItemIcon>
+          <Typography fontSize={18}>TABLEROS</Typography>
+        </ListItemButton>
+      </ListItem>
+      <Divider sx={{ p: 1 }} />
       <ListItem disablePadding>
         <ListItemButton selected={location.pathname === AppRoutesSidebar.HOME} onClick={() => navigate(AppRoutesSidebar.HOME)}>
           <ListItemIcon><Icon icon='tabler:category-filled' fontSize={24} /></ListItemIcon>

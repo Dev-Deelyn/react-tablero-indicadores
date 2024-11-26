@@ -48,3 +48,9 @@ export default tseslint.config({
   },
 })
 ```
+
+---
+## .ENV CONFIGS
+```
+VITE_APP_SERVER_URL = https://localhost:3000
+```
