@@ -14,6 +14,7 @@ class User {
   public username: string = '';
   public email: string = '';
   public profileType?: 'ADMIN' | 'INVITADO';
+  public dashboards?: string[];
   public token?: string;
 
   constructor(data: Partial<User>) {

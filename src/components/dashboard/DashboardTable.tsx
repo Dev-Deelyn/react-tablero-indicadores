@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Switch } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -38,7 +38,8 @@ const DashboardTable: React.FC<DashboardTableProps> = (props) => {
           {props.dashboards.map((dashboard, index) => (
             <TableRow key={index}>
               <TableCell>{dashboard.keyname}</TableCell>
-              <TableCell>{dashboard.show ? 'SI' : 'NO'}</TableCell>
+              <TableCell><Switch checked={dashboard.show} /></TableCell>
+              {/* <TableCell>{dashboard.show ? 'SI' : 'NO'}</TableCell> */}
               <TableCell align="center">
                 {
                   props.onClickEdit &&

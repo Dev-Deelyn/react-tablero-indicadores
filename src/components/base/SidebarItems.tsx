@@ -4,10 +4,24 @@ import { AppRoutesSidebar } from 'types/SidebarApp'
 import { indexerRoutes } from 'router/routes'
 import SectionNavItem from 'components/common/SectionNavItem'
 import { Icon } from '@iconify/react'
+import { useContext, useEffect, useState } from 'react'
+import AuthContext from 'contexts/AuthContext'
+import IndicatorRoute from 'types/IndicatorRoutes.types'
 
 const SidebarItems = () => {
+  const [listRoutes, setListRoutes] = useState<IndicatorRoute[]>([])
+  const { authUser } = useContext(AuthContext);
+
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => {
+    if (authUser) {
+      const dashboardsPublics = authUser.dashboards;
+      const list = indexerRoutes.filter(route => route.show).filter(route => dashboardsPublics?.includes(route.keyname ?? ''))
+      setListRoutes(list)
+    }
+  }, [indexerRoutes, authUser])
 
   return (
     <List>
@@ -30,7 +44,7 @@ const SidebarItems = () => {
           <Typography fontSize={18}>INDICE</Typography>
         </ListItemButton>
       </ListItem>
-      {indexerRoutes.map((route, index) => <SectionNavItem key={`navitemsection-${route.title}-${index}`} {...route} location={location} navigate={navigate} />)}
+      {listRoutes.map((route, index) => <SectionNavItem key={`navitemsection-${route.title}-${index}`} {...route} location={location} navigate={navigate} />)}
     </List>
   )
 }

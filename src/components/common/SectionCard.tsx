@@ -1,11 +1,11 @@
 import { Icon } from '@iconify/react'
 import { Card, CardContent, Link, Typography, Zoom } from '@mui/material'
 import React from 'react'
-import IndicatorRoutes from 'types/IndicatorRoutes.types'
+import IndicatorRoute from 'types/IndicatorRoutes.types'
 import { Link as RouterLink } from 'react-router-dom'
 import { baseIconIconify } from 'config/constants'
 
-interface SectionCardProps extends IndicatorRoutes {
+interface SectionCardProps extends IndicatorRoute {
   transitionDelay?: number
 }
 

@@ -1,10 +1,11 @@
-// import { ReactElement } from "react";
+import DashboardIcons from "./DashboardIcons";
 
-export default interface IndicatorRoutes {
+export default interface IndicatorRoute {
   path: string;
   title: string;
   content?: JSX.Element;
   shortTitle?: string;
-  icon?: string;
+  keyname?: string;
+  icon?: DashboardIcons | string;
   show?: boolean;
 }

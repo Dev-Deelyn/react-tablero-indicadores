@@ -1,30 +1,46 @@
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import SectionCard from 'components/common/SectionCard'
+import AuthContext from 'contexts/AuthContext';
 import NavbarContext from 'contexts/NavbarContext';
-import { useContext, useEffect } from 'react';
-import IndicatorRoutes from 'types/IndicatorRoutes.types'
+import { useContext, useEffect, useState } from 'react';
+import IndicatorRoute from 'types/IndicatorRoutes.types'
 
 interface IndexerProps {
   title?: string;
-  routes: IndicatorRoutes[];
+  routes: IndicatorRoute[];
+  main?: boolean;
 }
 
 const headTitle = 'indice tablero de'
 const cardTransitionDelay = 60;
 
 const Indexer: React.FC<IndexerProps> = (props) => {
+  const [listRoutes, setListRoutes] = useState<IndicatorRoute[]>([])
+  const { authUser } = useContext(AuthContext);
   const { changeNavTitle } = useContext(NavbarContext);
 
   useEffect(() => {
     changeNavTitle(props.title ? `${headTitle} ${props.title}` : '')
   }, [props.title])
 
+  useEffect(() => {
+    if (props.main) {
+      if (authUser) {
+        const dashboardsPublics = authUser.dashboards;
+        const list = props.routes.filter(route => route.show).filter(route => dashboardsPublics?.includes(route.keyname ?? ''))
+        setListRoutes(list)
+      }
+    } else {
+      setListRoutes(props.routes)
+    }
+  }, [props.routes, authUser])
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={5}>
         {
-          props.routes.map((route, index) => (
+          listRoutes?.map((route, index) => (
             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
               <SectionCard key={`sectioncard-${route.title}-${index}`} {...route} transitionDelay={(index + 1) * cardTransitionDelay} />
             </Grid>

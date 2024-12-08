@@ -1,10 +1,10 @@
 import { ListItem, ListItemButton, ListItemIcon, Typography } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { Location, NavigateFunction } from 'react-router-dom';
-import IndicatorRoutes from 'types/IndicatorRoutes.types';
+import IndicatorRoute from 'types/IndicatorRoutes.types';
 import { baseIconIconify } from 'config/constants';
 
-interface SectionNavItemProps extends IndicatorRoutes {
+interface SectionNavItemProps extends IndicatorRoute {
   location: Location;
   navigate: NavigateFunction;
 }

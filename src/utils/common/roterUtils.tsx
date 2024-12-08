@@ -1,16 +1,16 @@
 import Indexer from "containers/common/Indexer";
 import IndicatorContainer from "containers/common/IndicatorContainer";
 import { RouteObject } from "react-router-dom";
-import IndicatorRoutes from "types/IndicatorRoutes.types";
+import IndicatorRoute from "types/IndicatorRoutes.types";
 
 
-export const createIndexedRoutes = (routes: IndicatorRoutes[]): RouteObject[] => {
+export const createIndexedRoutes = (routes: IndicatorRoute[]): RouteObject[] => {
   return routes.map(route =>
     ({ path: route.path, element: <IndicatorContainer children={route.content} title={route.title} /> })
   )
 }
 
-export const createRouterRoutes = (routePath: string, routeTitle: string, routes: IndicatorRoutes[]): RouteObject[] => {
+export const createRouterRoutes = (routePath: string, routeTitle: string, routes: IndicatorRoute[]): RouteObject[] => {
   const indexedRoutes = createIndexedRoutes(routes);
 
   return ([
@@ -23,11 +23,13 @@ export const createRouterRoutes = (routePath: string, routeTitle: string, routes
   ]);
 }
 
-export const createMainRoute = (routePath: string, routeTitle: string, routeIcon: string) => {
+export const createMainRoute = (routePath: string, routeTitle: string, routeIcon: string, keyname: string, show: boolean): IndicatorRoute => {
   return ({
     path: `/${routePath}`,
+    keyname,
     icon: routeIcon,
-    title: routeTitle
+    title: routeTitle,
+    show
   })
 }
 // routePath: string, routeTitle: string, 

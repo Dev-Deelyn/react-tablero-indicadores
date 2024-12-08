@@ -1,5 +1,6 @@
 import { Box, Button, TextField, Typography, Container, CssBaseline, Alert, Collapse } from '@mui/material';
-import { useState } from 'react';
+import AuthContext from 'contexts/AuthContext';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sendAuthLogin } from 'services/AuthServices';
 
@@ -8,6 +9,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState<string>();
   const [error, setError] = useState<string>();
 
+  const { loginUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSendLogin = async () => {
@@ -15,6 +17,7 @@ const LoginPage = () => {
       setError(undefined)
       const { error, data } = await sendAuthLogin(username, password)
       if (data) {
+        loginUser(data)
         navigate('/')
       } else {
         setError(error)
