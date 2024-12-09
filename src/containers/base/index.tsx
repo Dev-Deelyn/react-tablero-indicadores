@@ -3,16 +3,18 @@ import { Box, CssBaseline } from '@mui/material'
 import { useTheme } from '@mui/material/styles';
 import Main from 'styled-components/base/Main';
 import NavBar from 'components/base/Navbar';
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Sidebar from 'components/base/Sidebar';
 import { NavbarContextProvider } from 'contexts/NavbarContext';
 import AuthContext from 'contexts/AuthContext';
+import { routesKeynamesVisibles } from 'router/routes';
 
 const Base = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const { authUser, validateUser, loginUser } = useContext(AuthContext);
+  const location = useLocation();
+  const { validateUser, loginUser } = useContext(AuthContext);
 
   const theme = useTheme();
 
@@ -32,6 +34,23 @@ const Base = () => {
       loginUser(user)
     }
   }, [])
+
+  useEffect(() => {
+    const user = validateUser()
+    if (!user) {
+      navigate('/login');
+    } else {
+      const [mainPath] = location.pathname.split('/');
+      const validDashboards = routesKeynamesVisibles;
+
+      if (validDashboards.includes(mainPath)) {
+        const isValid = user.dashboards?.includes(mainPath)
+        if (!isValid) {
+          navigate('/')
+        }
+      }
+    }
+  }, [location])
 
   return (
     <NavbarContextProvider>

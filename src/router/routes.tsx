@@ -2,8 +2,8 @@ import Base from "containers/base";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import IndicatorRoute from "types/IndicatorRoutes.types";
 import Indexer from "containers/common/Indexer";
-import saludRoutes, { saludIndicatorRoute } from "./salud.routes";
-import educacionRoutes, { educacionIndicatorRoute } from "./educacion.routes";
+import { objSaludRoutes, saludIndicatorRoute } from "./salud.routes";
+import { educacionIndicatorRoute, objEducacionRoutes } from "./educacion.routes";
 import LoginPage from "containers/user/LoginPage";
 import UserList from "containers/user/UsersList";
 import DashboardList from "containers/board/DashboardList";
@@ -13,6 +13,14 @@ export const indexerRoutes: IndicatorRoute[] = [
   educacionIndicatorRoute,
 ];
 
+export const routesKeynamesVisibles = indexerRoutes.filter(route => route.show).map(route => route.keyname);
+export const routesKeynames = indexerRoutes.map(route => route.keyname);
+
+const visibleRoutes = [
+  objSaludRoutes,
+  objEducacionRoutes
+].filter(obj => obj.show).flatMap(obj => obj.routes);
+
 export const loguedRoutes = createBrowserRouter([
   {
     path: '/', element: <Base />, children: [
@@ -20,8 +28,7 @@ export const loguedRoutes = createBrowserRouter([
       { path: 'usuarios', element: <UserList /> },
       { path: 'tableros', element: <DashboardList /> },
       { path: 'main', element: <Indexer main title="indicadores provinciales" routes={indexerRoutes} /> },
-      ...saludRoutes,
-      ...educacionRoutes
+      ...visibleRoutes
     ],
   },
   { path: 'login', element: <LoginPage /> },

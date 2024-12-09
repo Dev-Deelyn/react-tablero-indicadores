@@ -3,11 +3,11 @@ import DashboardIcons from "types/DashboardIcons";
 import IndicatorRoute from "types/IndicatorRoutes.types";
 import { createMainRoute, createRouterRoutes } from "utils/common/roterUtils";
 
-const routePath = 'educacion';
 const routeTitle = 'educación';
 const keyName = 'educacion'; // Este valor define como encontrar al registro en la BD
+const routePath = keyName;
 const routeIcon = DashboardIcons[keyName];
-const show = false;
+const show = true;
 
 const routes: IndicatorRoute[] = [
   { keyname: keyName, path: 'indicadores-provinciales', icon: routeIcon, title: 'indicadores provinciales', content: <BaseSection content='indicadores provinciales' /> },
@@ -19,6 +19,11 @@ const routes: IndicatorRoute[] = [
 ];
 
 const educacionRoutes = createRouterRoutes(routePath, routeTitle, routes);
+
+export const objEducacionRoutes = {
+  show,
+  routes: educacionRoutes
+}
 
 export const educacionIndicatorRoute = createMainRoute(routePath, routeTitle, routeIcon, keyName, show);
 

@@ -4,9 +4,9 @@ import DashboardIcons from "types/DashboardIcons";
 import IndicatorRoute from "types/IndicatorRoutes.types";
 import { createMainRoute, createRouterRoutes } from "utils/common/roterUtils";
 
-const routePath = 'salud';
 const routeTitle = 'salud';
 const keyName = 'salud'; // Este valor define como encontrar al registro en la BD
+const routePath = keyName;
 const routeIcon = DashboardIcons[keyName];
 const show = true;
 
@@ -34,6 +34,11 @@ const routes: IndicatorRoute[] = [
 ];
 
 const saludRoutes = createRouterRoutes(routePath, routeTitle, routes);
+
+export const objSaludRoutes = {
+  show,
+  routes: saludRoutes
+}
 
 export const saludIndicatorRoute = createMainRoute(routePath, routeTitle, routeIcon, keyName, show)
 
