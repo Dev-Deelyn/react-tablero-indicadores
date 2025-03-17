@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -20,11 +20,12 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
     }
   }
 
-  const handleEdit = (user: User) => {
-    if (user && props.onClickEdit) {
-      props.onClickEdit(user)
-    }
-  }
+  // const handleEdit = (user: User) => {
+  //   if (user && props.onClickEdit) {
+  //     props.onClickEdit(user)
+  //   }
+  // }
+  console.log('onClickDelete:', props.onClickDelete);
 
   return (
     <TableContainer component={Paper} style={{ marginTop: 20 }}>
@@ -44,12 +45,12 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.profileType}</TableCell>
               <TableCell align="center">
-                {
+                {/* {
                   props.onClickEdit &&
                   <IconButton color="primary" onClick={() => handleEdit(user)}>
                     <EditIcon />
                   </IconButton>
-                }
+                } */}
                 {
                   props?.onClickDelete &&
                   <IconButton color="secondary" onClick={() => handleDelete(user)}>

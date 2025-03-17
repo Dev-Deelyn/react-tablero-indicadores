@@ -46,7 +46,12 @@ const UserList = () => {
       </Button>
 
       <UserFormModal show={open} item={selectedUser} onAccept={refreshListUsers} onClose={handleClose} />
-      <TableItems users={listUsers} onClickEdit={handleEditUser} onClickDashboards={() => { }} />
+      <TableItems
+        users={listUsers}
+        onClickEdit={handleEditUser}
+        onClickDashboards={() => { }}
+        onClickDelete={(user) => console.log('Eliminar:', user)}
+      />
     </div>
   );
 };
