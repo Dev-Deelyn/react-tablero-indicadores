@@ -1,5 +1,5 @@
 enum DashboardIcons {
-  salud = 'material-symbols:school',
+  salud = 'material-symbols:local-hospital',
   educacion = 'material-symbols:school'
 }
 
