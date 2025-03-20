@@ -1,6 +1,9 @@
 import { Box, Avatar, Button, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
+import { useContext } from 'react';
+import AuthContext from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -14,6 +17,11 @@ const UserMenu = () => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  const { logoutUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
 
   return (
     <Box>
@@ -53,7 +61,11 @@ const UserMenu = () => {
                 <Button onClick={() => logoutUser()} variant='contained' startIcon={<LogoutIcon />}>Salir</Button>
               </Box> */}
         {/* </Box> */}
-        <MenuItem onClick={() => console.log('adios')}>
+        <MenuItem onClick={() => {
+          logoutUser();
+          handleCloseMenu();
+          navigate('/login');
+        }}>
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
