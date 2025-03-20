@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import User from 'types/User';
 import UserFormModal from 'components/user/UserFormModal';
-import { getAllUsers } from 'services/UserServices';
+import { getAllUsers, deleteUser } from 'services/UserServices';
 import TableItems from 'components/user/TableItems';
 
 const UserList = () => {
@@ -35,6 +35,15 @@ const UserList = () => {
     handleOpen()
   }
 
+  const handleDeleteUser = async (user: User) => {
+    try {
+      await deleteUser(user.username, user.email);
+      setListUsers((prevUsers) => prevUsers.filter((u) => u.username !== user.username));
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error);
+    }
+  };
+
   useEffect(() => {
     getUsuarios()
   }, [])
@@ -50,7 +59,7 @@ const UserList = () => {
         users={listUsers}
         onClickEdit={handleEditUser}
         onClickDashboards={() => { }}
-        onClickDelete={(user) => console.log('Eliminar:', user)}
+        onClickDelete={handleDeleteUser}
       />
     </div>
   );

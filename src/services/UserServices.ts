@@ -10,3 +10,7 @@ export const sendCreateUser = async (user: UserForm) => {
 export const getAllUsers = async (): Promise<DataResponse<User[]>> => {
   return await responseFormatter(apiClient.get('/user/get-all'));
 }
+
+export const deleteUser = async (username: string, email: string) => {
+  return await responseFormatter(apiClient.delete('/user', { data: { username, email } }));
+};
