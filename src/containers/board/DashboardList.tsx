@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
-import Dashboard from 'types/Dashboard';
+import Dashboard, { DashboardForm } from 'types/Dashboard';
 import { getAllDashboards } from 'services/DashboardServices';
 import DashboardTable from 'components/dashboard/DashboardTable';
+import DashboardFormModal from 'components/dashboard/DashboardFormModal';
 
 const DashboardList = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -18,24 +19,24 @@ const DashboardList = () => {
     setOpen(false)
   }
 
-  const getUsuarios = async () => {
+  const getDashboards = async () => {
     const { data: dashboards } = await getAllDashboards();
     if (dashboards) {
       setListDashboard(dashboards)
     }
   }
 
-  // const refreshListUsers = () => {
-  //   getUsuarios()
-  // }
+  const refreshListDashboards = () => {
+    getDashboards()
+  }
 
-  const handleEditUser = (dashboard: Dashboard) => {
+  const handleEditDashboard = (dashboard: Dashboard) => {
     setSelectedDashboard(dashboard);
     handleOpen()
   }
 
   useEffect(() => {
-    getUsuarios()
+    getDashboards()
   }, [])
 
   return (
@@ -44,8 +45,18 @@ const DashboardList = () => {
         Agregar Tablero
       </Button>
 
-      {/* <UserFormModal show={open} item={selectedDashboard} onAccept={refreshListUsers} onClose={handleClose} /> */}
-      <DashboardTable dashboards={listDashboard} onClickEdit={handleEditUser} />
+      <DashboardFormModal
+        show={open}
+        editMode={!!selectedDashboard}
+        item={selectedDashboard as DashboardForm}
+        onAccept={(form) => {
+          console.log('Formulario recibido:', form);
+          refreshListDashboards(); // Refrescar la lista después de guardar
+        }}
+        onClose={handleClose}
+      />
+
+      <DashboardTable dashboards={listDashboard} onClickEdit={handleEditDashboard} />
     </div>
   );
 };

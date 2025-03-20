@@ -8,4 +8,13 @@ class Dashboard {
   }
 }
 
+export class DashboardForm extends Dashboard {
+  public newKeyname?: string;
+
+  constructor(data: Partial<DashboardForm>) {
+    super(data);
+    Object.assign(this, data);
+  }
+}
+
 export default Dashboard
