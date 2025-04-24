@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Dashboard from 'types/Dashboard';
 import { sendEditDashboard } from 'services/DashboardServices';
+import { Icon } from '@iconify/react';
 
 // Se extiende la interfaz de propiedades para incluir un callback que permita notificar
 // al componente padre sobre el cambio en la visibilidad.
@@ -36,7 +37,7 @@ const DashboardTable: React.FC<DashboardTableProps> = (props) => {
     try {
       // Llama al servicio para actualizar la visibilidad.
       // Se pasa undefined en newKeyname para indicar que no se quiere modificar el nombre.
-      await sendEditDashboard(dashboard.keyname, undefined, newShow);
+      await sendEditDashboard(dashboard._id!, undefined, newShow);
 
       // Si se ha definido un callback onVisibilityToggle, se invoca para que el componente
       // padre pueda refrescar o actualizar la lista de dashboards.
@@ -78,8 +79,16 @@ const DashboardTable: React.FC<DashboardTableProps> = (props) => {
         <TableBody>
           {props.dashboards.map((dashboard, index) => (
             <TableRow key={index}>
-              <TableCell>{dashboard.keyname}</TableCell>
-              <TableCell>
+                <TableCell>
+                  {dashboard.icon && (
+                    <Icon
+                      icon={dashboard.icon}
+                      style={{ fontSize: '24px', marginRight: '8px', verticalAlign: 'middle' }}
+                    />
+                  )}
+                  {dashboard.keyname}
+                </TableCell>
+                <TableCell>
                 {/* El Switch ahora es interactivo: al cambiar su valor se llama a handleSwitchChange */}
                 <Switch
                   checked={dashboard.show}

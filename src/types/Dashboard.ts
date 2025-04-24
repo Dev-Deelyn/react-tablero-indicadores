@@ -2,6 +2,7 @@ class Dashboard {
   public _id?: string;
   public keyname: string = '';
   public show: boolean = false;
+  public icon?: string
 
   constructor(data: Partial<Dashboard>) {
     Object.assign(this, data)
