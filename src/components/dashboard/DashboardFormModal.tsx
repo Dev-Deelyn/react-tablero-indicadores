@@ -1,106 +1,148 @@
 import React, { useEffect, useState } from 'react';
-// Se importan los componentes de Material UI para armar el modal y sus elementos.
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+import { 
+  Button, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogTitle, 
   TextField,
   Switch,
-  FormControlLabel
+  FormControlLabel,
+  Container,
+  Collapse,
+  Box
 } from '@mui/material';
-
-// Se importa el tipo para definir la forma de los datos del dashboard en el formulario.
+import { Icon } from '@iconify/react';
+import materialSymbolsData from '@iconify/json/json/material-symbols.json';
+import { FixedSizeGrid as Grid } from 'react-window';
 import { DashboardForm } from 'types/Dashboard';
-// Se importan los servicios para enviar la creación o edición de un dashboard.
 import { sendCreateDashboard, sendEditDashboard } from 'services/DashboardServices';
 
-// Se define la interfaz de las propiedades que recibirá el modal.
 interface DashboardFormModalProps {
-  item?: DashboardForm;           // Objeto con los datos del dashboard actual, usado en modo edición.
-  show: boolean;                  // Controla si el modal se muestra o no.
-  editMode?: boolean;             // Indica si el modal está en modo edición.
-  onAccept: (form: Partial<DashboardForm>) => any; // Callback que se ejecuta al aceptar o guardar el formulario.
-  onClose: () => any;             // Callback para cerrar el modal.
+  item?: DashboardForm;
+  show: boolean;
+  editMode?: boolean;
+  onAccept: (form: Partial<DashboardForm>) => any;
+  onClose: () => any;
 }
 
-// Componente funcional que representa el modal para crear o editar dashboards.
-const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
-  // Estado local para almacenar los datos del formulario.
-  const [form, setForm] = useState<Partial<DashboardForm>>({});
+// Definición mínima para tipar el JSON de Material Symbols
+interface MaterialSymbols {
+  prefix: string;
+  icons: Record<string, unknown>;
+  categories: Record<string, string[]>;
+}
 
-  // Maneja cambios en campos de texto (TextFields).
+
+const iconData = materialSymbolsData as MaterialSymbols;
+
+const allowedCategories = ["Actions", "Activities", "Business", "Maps", "Travel", "UI Actions"];
+
+const allowedIcons = new Set<string>();
+allowedCategories.forEach((category) => {
+  const iconsInCategory = iconData.categories[category];
+  if (iconsInCategory) {
+    iconsInCategory.forEach((iconKey) => allowedIcons.add(iconKey));
+  }
+});
+
+// Filtrado para obtener únicamente los íconos Regular:
+// Es decir, aquellos que NO terminen con ningún sufijo adicional.
+const iconsList = Object.keys(iconData.icons)
+  .filter((key) => {
+    const nonRegularSuffixes = ['-rounded', '-sharp', '-outline', '-outline-rounded', '-outline-sharp'];
+    const isRegular = !nonRegularSuffixes.some(suffix => key.endsWith(suffix));
+    const inAllowedCategory = allowedIcons.has(key);
+    return isRegular && inAllowedCategory;
+  })
+  .map((key) => `${iconData.prefix}:${key}`);
+
+
+const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
+  const [form, setForm] = useState<Partial<DashboardForm>>({});
+  const [showIconPicker, setShowIconPicker] = useState<boolean>(false);
+
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const { name, value } = event.target;
-    // Actualiza el estado asignando el valor al campo identificado por 'name'.
-    setForm(prev => ({ ...prev, [name as string]: value }));
+    setForm((prev) => ({ ...prev, [name as string]: value }));
   };
 
-  // Maneja cambios específicos de un Switch (campo booleano).
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
-    // Actualiza el estado con el valor booleano (checked) del interruptor.
-    setForm(prev => ({ ...prev, [name]: checked }));
+    setForm((prev) => ({ ...prev, [name]: checked }));
   };
 
-  // Función que se ejecuta al aceptar el formulario (al guardar).
   const handleAccept = async () => {
     try {
       if (props.editMode) {
-        // En modo edición: se llama al servicio para editar el dashboard.
-        // Se requiere que existan tanto el nombre actual (keyname) como el nuevo (newKeyname).
-        if (form.keyname && form.newKeyname) {
-          await sendEditDashboard(form.keyname, form.newKeyname);
+        const dashboardId = form._id || props.item?._id;
+        if (dashboardId) {
+          await sendEditDashboard(
+            dashboardId,
+            form.newKeyname || undefined,
+            form.show,
+            form.icon || undefined
+          );
         }
       } else {
-        // En modo creación: se llama al servicio para crear el dashboard.
-        // Se comprueba que exista un keyname y se crea el payload, incluyendo el valor
-        // del campo show (visibilidad), que si no se define se considera false.
         if (form.keyname) {
-          const payload = { keyname: form.keyname, show: form.show || false };
+          const payload = { keyname: form.keyname, show: form.show || false, icon: form.icon || '' };
           await sendCreateDashboard(payload);
         }
       }
-      // Se notifica al componente padre pasando el formulario, para que actualice la lista.
       props.onAccept(form);
-      // Se cierra el modal una vez completada la operación.
       props.onClose();
     } catch (error) {
-      // Se captura y muestra en consola cualquier error producido durante la operación.
       console.error('Error al guardar:', error);
     }
   };
 
-  // useEffect se ejecuta cada vez que cambian las props 'editMode' o 'item'.
-  // Inicializa el formulario dependiendo del modo del modal.
-  useEffect(() => {
+  const handleCancel = () => {
     if (props.editMode && props.item) {
-      // En modo edición, se inicializa el formulario con el keyname actual.
-      // Además se inicializa 'newKeyname' como cadena vacía para que el usuario ingrese el nuevo nombre.
+      // En modo edición, reseteamos el formulario a los valores de props.item
       setForm({
-        keyname: props.item.keyname,
-        newKeyname: '' // Campo adicional solo utilizado en la edición.
+        ...props.item,
+        newKeyname: ''
       });
     } else {
-      // En modo creación, se inicializa el formulario con valores por defecto.
+      // En modo creación, reiniciamos el formulario a sus valores por defecto
       setForm({
-        keyname: '',  // Campo vacío para ingresar el nombre del nuevo dashboard.
-        show: false   // Valor por defecto de visibilidad.
+        keyname: '',
+        show: false,
+        icon: ''
+      });
+    }
+    props.onClose();
+  };
+  
+
+  useEffect(() => {
+    if (props.editMode && props.item) {
+      setForm({
+        keyname: props.item.keyname,
+        newKeyname: '',
+        icon: props.item.icon || ''
+      });
+    } else {
+      setForm({
+        keyname: '',
+        show: false,
+        icon: ''
       });
     }
   }, [props.editMode, props.item]);
 
-  // Renderizado del componente: se configura un modal (Dialog) que se abre o cierra según la prop 'show'.
+  const handleIconSelect = (iconName: string) => {
+    setForm((prev) => ({ ...prev, icon: iconName }));
+    setShowIconPicker(false);
+  };
+
   return (
     <Dialog open={props.show} onClose={props.onClose}>
-      {/* Título del modal varía según el modo (editar o agregar). */}
       <DialogTitle>{props.editMode ? 'Editar Tablero' : 'Agregar Tablero'}</DialogTitle>
       <DialogContent>
         {props.editMode ? (
-          // Renderizado condicional: en modo edición, se presentan dos campos.
           <>
-            {/* Campo que muestra el nombre actual del dashboard (deshabilitado para edición directa). */}
             <TextField
               margin="dense"
               name="keyname"
@@ -110,7 +152,6 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
               value={form?.keyname || ''}
               disabled
             />
-            {/* Campo para ingresar el nuevo nombre para editar el dashboard. */}
             <TextField
               margin="dense"
               name="newKeyname"
@@ -120,13 +161,46 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
               value={form?.newKeyname || ''}
               onChange={handleChange}
             />
+            <Container style={{ marginTop: '10px' }}>
+              <Button variant="outlined" onClick={() => setShowIconPicker((prev) => !prev)}>
+                {form.icon ? 'Cambiar ícono' : 'Seleccionar ícono'}
+              </Button>
+              {form.icon && (
+                <Box mt={1}>
+                  <Icon icon={form.icon} style={{ fontSize: '36px', color: '#000' }} />
+                </Box>
+              )}
+              <Collapse in={showIconPicker}>
+                <Grid
+                  columnCount={4}
+                  columnWidth={80}
+                  height={220}
+                  rowCount={Math.ceil(iconsList.length / 4)}
+                  rowHeight={80}
+                  width={340}
+                  style={{ marginTop: '10px' }}
+                >
+                  {({ columnIndex, rowIndex, style }) => {
+                    const iconIndex = rowIndex * 4 + columnIndex;
+                    if (iconIndex >= iconsList.length) return null;
+                    const iconName = iconsList[iconIndex];
+                    return (
+                      <div style={style} key={iconName}>
+                        <Button
+                          onClick={() => handleIconSelect(iconName)}
+                          style={{ minWidth: 'auto', padding: 8 }}
+                        >
+                          <Icon icon={iconName} style={{ fontSize: '36px', color: '#000' }} />
+                        </Button>
+                      </div>
+                    );
+                  }}
+                </Grid>
+              </Collapse>
+            </Container>
           </>
         ) : (
-          // En modo creación, se muestran campos para ingresar los datos del nuevo dashboard.
           <>
-            {/* Campo editable para ingresar el nombre del nuevo dashboard.
-                autoFocus permite que este campo esté seleccionado al abrirse el modal.
-            */}
             <TextField
               autoFocus
               margin="dense"
@@ -137,26 +211,56 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
               value={form?.keyname || ''}
               onChange={handleChange}
             />
-            {/* Interruptor (Switch) para definir si el tablero será visible. */}
             <FormControlLabel
               control={
-                <Switch
-                  name="show"
-                  checked={form?.show || false}
-                  onChange={handleSwitchChange}
-                />
+                <Switch name="show" checked={form?.show || false} onChange={handleSwitchChange} />
               }
               label="Mostrar tablero"
             />
+            <Container style={{ marginTop: '10px' }}>
+              <Button variant="outlined" onClick={() => setShowIconPicker((prev) => !prev)}>
+                {form.icon ? 'Cambiar ícono' : 'Seleccionar ícono'}
+              </Button>
+              {form.icon && (
+                <Box mt={1}>
+                  <Icon icon={form.icon} style={{ fontSize: '36px', color: '#000' }} />
+                </Box>
+              )}
+              <Collapse in={showIconPicker}>
+                <Grid
+                  columnCount={4}
+                  columnWidth={80}
+                  height={220}
+                  rowCount={Math.ceil(iconsList.length / 4)}
+                  rowHeight={80}
+                  width={340}
+                  style={{ marginTop: '10px' }}
+                >
+                  {({ columnIndex, rowIndex, style }) => {
+                    const iconIndex = rowIndex * 4 + columnIndex;
+                    if (iconIndex >= iconsList.length) return null;
+                    const iconName = iconsList[iconIndex];
+                    return (
+                      <div style={style} key={iconName}>
+                        <Button
+                          onClick={() => handleIconSelect(iconName)}
+                          style={{ minWidth: 'auto', padding: 8 }}
+                        >
+                          <Icon icon={iconName} style={{ fontSize: '36px', color: '#000' }} />
+                        </Button>
+                      </div>
+                    );
+                  }}
+                </Grid>
+              </Collapse>
+            </Container>
           </>
         )}
       </DialogContent>
       <DialogActions>
-        {/* Botón para cancelar, que simplemente cierra el modal. */}
-        <Button onClick={props.onClose} color="primary">
+        <Button onClick={handleCancel} color="primary">
           Cancelar
         </Button>
-        {/* Botón para guardar los cambios o crear un dashboard, ejecutando 'handleAccept'. */}
         <Button onClick={handleAccept} color="primary">
           Guardar
         </Button>
