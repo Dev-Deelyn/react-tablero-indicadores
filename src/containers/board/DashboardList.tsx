@@ -4,6 +4,7 @@ import Dashboard, { DashboardForm } from 'types/Dashboard';
 import { getAllDashboards } from 'services/DashboardServices';
 import DashboardTable from 'components/dashboard/DashboardTable';
 import DashboardFormModal from 'components/dashboard/DashboardFormModal';
+import DashboardSectionsModal from 'components/dashboard/DashboardSectionsModal';
 
 // Componente principal que gestiona la lista de dashboards,
 // la apertura del modal para creación/edición y la interacción con la API.
@@ -14,6 +15,9 @@ const DashboardList = () => {
   const [selectedDashboard, setSelectedDashboard] = useState<Dashboard | undefined>();
   // Estado que contiene la lista de dashboards obtenidos del backend.
   const [listDashboard, setListDashboard] = useState<Dashboard[]>([]);
+
+  const [openSections, setOpenSections] = useState<boolean>(false);
+  const [selectedForSections, setSelectedForSections] = useState<Dashboard | undefined>();
 
   // Función para abrir el modal
   const handleOpen = () => {
@@ -37,8 +41,11 @@ const DashboardList = () => {
   };
 
   // Función auxiliar para refrescar la lista de dashboards.
-  const refreshListDashboards = () => {
-    getDashboards();
+  const refreshListDashboards = async () => {
+    const { data: dashboards } = await getAllDashboards();
+    if (dashboards) {
+      setListDashboard(dashboards);
+    }
   };
 
   // Función que se ejecuta cuando se desea editar un dashboard.
@@ -47,6 +54,31 @@ const DashboardList = () => {
     setSelectedDashboard(dashboard);
     handleOpen();
   };
+
+  // Función para abrir el modal de secciones
+   const handleOpenSections = async (dashboard: Dashboard) => {
+    // Actualizamos toda la lista
+    const { data: dashboards } = await getAllDashboards();
+    if (dashboards) {
+      setListDashboard(dashboards);
+      // Buscamos el dashboard actualizado por su id
+      const updatedDashboard = dashboards.find(d => d._id === dashboard._id);
+      if (updatedDashboard) {
+        setSelectedForSections(updatedDashboard);
+      } else {
+        // Por si no lo encuentra (aunque no debería pasar) usamos el dashboard actual
+        setSelectedForSections(dashboard);
+      }
+    } else {
+      setSelectedForSections(dashboard);
+    }
+    setOpenSections(true);
+  };
+
+   const handleCloseSections = () => {
+     setSelectedForSections(undefined);
+     setOpenSections(false);
+   };
 
   // useEffect para cargar la lista de dashboards cuando se monta el componente.
   useEffect(() => {
@@ -81,10 +113,18 @@ const DashboardList = () => {
       {/* Tabla que muestra la lista de dashboards.
           Recibe la lista de dashboards y una función para iniciar la edición.
       */}
-      <DashboardTable
+       <DashboardTable
         dashboards={listDashboard}
         onClickEdit={handleEditDashboard}
-        onVisibilityToggle={refreshListDashboards} // <== Pasamos la función que refseca la lista
+        onVisibilityToggle={refreshListDashboards}
+        onClickSections={handleOpenSections}
+      />
+      
+      {/* Modal de Secciones */}
+      <DashboardSectionsModal
+        open={openSections}
+        dashboard={selectedForSections as DashboardForm}
+        onClose={handleCloseSections}
       />
     </div>
   );

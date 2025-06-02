@@ -20,3 +20,12 @@ export const sendEditDashboard = async (dashboardId: string, newKeyname?: string
   return (await responseFormatter(apiClient.put(`/dashboard/edit/${dashboardId}`, payload))).data;
 };
 
+export const sendAddSection = async (dashboardId: string, sections: string[]) => {
+  return (await responseFormatter(
+    apiClient.post(`/dashboard/add/${dashboardId}`, { sections })
+  )).data;
+};
+
+// export const getAllSections
+
+// export const addSection

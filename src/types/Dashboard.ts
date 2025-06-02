@@ -1,11 +1,14 @@
+import Sections from './Sections';
+
 class Dashboard {
   public _id?: string;
   public keyname: string = '';
   public show: boolean = false;
-  public icon?: string
-
+  public sections: Sections[] = []; // Cambiado de string[] a Sections[]
+  public icon?: string;
+  
   constructor(data: Partial<Dashboard>) {
-    Object.assign(this, data)
+    Object.assign(this, data);
   }
 }
 
@@ -18,4 +21,4 @@ export class DashboardForm extends Dashboard {
   }
 }
 
-export default Dashboard
+export default Dashboard;

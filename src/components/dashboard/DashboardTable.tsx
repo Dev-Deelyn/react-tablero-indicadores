@@ -12,6 +12,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import DashboardIcon from '@mui/icons-material/Dashboard'
 import Dashboard from 'types/Dashboard';
 import { sendEditDashboard } from 'services/DashboardServices';
 import { Icon } from '@iconify/react';
@@ -23,6 +24,7 @@ interface DashboardTableProps {
   onClickEdit?: (item: Dashboard) => any;
   onClickDelete?: (item: Dashboard) => any;
   onVisibilityToggle?: () => any; // Callback para refrescar la lista o actualizar la visibilidad
+  onClickSections?: (item: Dashboard) => any;  // <-- nueva prop
 }
 
 const DashboardTable: React.FC<DashboardTableProps> = (props) => {
@@ -96,11 +98,22 @@ const DashboardTable: React.FC<DashboardTableProps> = (props) => {
                 />
               </TableCell>
               <TableCell align="center">
+                {/* Botón Editar */}
                 {props.onClickEdit && (
                   <IconButton color="primary" onClick={() => handleEdit(dashboard)}>
                     <EditIcon />
                   </IconButton>
                 )}
+                {/* Botón Secciones */}
+                {props.onClickSections && (
+                  <IconButton
+                    color="secondary"
+                    onClick={() => props.onClickSections!(dashboard)}
+                  >
+                    <DashboardIcon />  {/* importar: import DashboardIcon from '@mui/icons-material/Dashboard'; */}
+                  </IconButton>
+                )}
+                {/* Botón Eliminar si existe */}
                 {props.onClickDelete && (
                   <IconButton color="secondary" onClick={() => handleDelete(dashboard)}>
                     <DeleteIcon />
