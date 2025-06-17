@@ -14,3 +14,31 @@ export const getAllUsers = async (): Promise<DataResponse<User[]>> => {
 export const deleteUser = async (username: string, email: string) => {
   return await responseFormatter(apiClient.delete('/user', { data: { username, email } }));
 };
+
+export const updateUserAccess = async (
+  userId: string,
+  access: { dashboard: string; sections: string[] }[]
+) => {
+  return await responseFormatter(
+    apiClient.post(`/user/access/${userId}`, { access })
+  );
+};
+
+// export const addDashboardAccessToUser = async (
+//   userId: string,
+//   dashboardId: string,
+//   sections?: string[]
+// ) => {
+//   return await responseFormatter(
+//     apiClient.post(`/user/${userId}/dashboard/${dashboardId}`, { sections })
+//   );
+// };
+
+// export const removeDashboardAccessFromUser = async (
+//   userId: string,
+//   dashboardId: string
+// ) => {
+//   return await responseFormatter(
+//     apiClient.delete(`/user/${userId}/dashboard/${dashboardId}`)
+//   );
+// };

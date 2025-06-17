@@ -4,9 +4,11 @@ import User from 'types/User';
 import UserFormModal from 'components/user/UserFormModal';
 import { getAllUsers, deleteUser } from 'services/UserServices';
 import TableItems from 'components/user/TableItems';
+import UserAccessModal from 'components/user/UserAccessModal';
 
 const UserList = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [openAccess, setOpenAccess] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [listUsers, setListUsers] = useState<User[]>([]);
 
@@ -18,6 +20,17 @@ const UserList = () => {
     setSelectedUser(undefined)
     setOpen(false)
   }
+
+  const handleOpenAccess = (user: User) => {
+    setSelectedUser(user);
+    setOpenAccess(true);
+  };
+
+  const handleCloseAccess = () => {
+    setSelectedUser(undefined);
+    setOpenAccess(false);
+  }
+
 
   const getUsuarios = async () => {
     const { data } = await getAllUsers();
@@ -58,9 +71,10 @@ const UserList = () => {
       <TableItems
         users={listUsers}
         onClickEdit={handleEditUser}
-        onClickDashboards={() => { }}
+        onClickDashboards={handleOpenAccess}
         onClickDelete={handleDeleteUser}
       />
+      <UserAccessModal show={openAccess} item={selectedUser} onAccept={refreshListUsers} onClose={handleCloseAccess}/>
     </div>
   );
 };

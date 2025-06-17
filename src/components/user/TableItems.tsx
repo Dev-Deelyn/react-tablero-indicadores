@@ -20,12 +20,18 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
     }
   }
 
+  const handleAccess = (user: User) => {
+    if (user && props.onClickDashboards) {
+      props.onClickDashboards(user)
+    }
+  }
+
   // const handleEdit = (user: User) => {
   //   if (user && props.onClickEdit) {
   //     props.onClickEdit(user)
   //   }
   // }
-  console.log('onClickDelete:', props.onClickDelete);
+  // console.log('onClickDelete:', props.onClickDelete);
 
   return (
     <TableContainer component={Paper} style={{ marginTop: 20 }}>
@@ -59,7 +65,7 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
                 }
                 {
                   props?.onClickDashboards &&
-                  <IconButton color="secondary" onClick={() => console.log(user)}>
+                  <IconButton color="secondary" onClick={() => handleAccess(user)}>
                     <DashboardIcon />
                   </IconButton>
                 }
