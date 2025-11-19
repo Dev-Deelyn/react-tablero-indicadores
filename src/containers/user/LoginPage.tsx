@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography, Container, CssBaseline, Alert, Collapse } from '@mui/material';
-import AuthContext from 'contexts/AuthContext';
+import { AuthContext } from 'contexts/AuthContext';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sendAuthLogin } from 'services/AuthServices';

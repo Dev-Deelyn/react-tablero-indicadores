@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import SectionCard from 'components/common/SectionCard'
-import AuthContext from 'contexts/AuthContext';
+import { AuthContext } from 'contexts/AuthContext';
 import NavbarContext from 'contexts/NavbarContext';
 import { useContext, useEffect, useState } from 'react';
 import IndicatorRoute from 'types/IndicatorRoutes.types'

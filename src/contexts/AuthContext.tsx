@@ -1,35 +1,48 @@
 import { createContext, useState } from "react";
 import User from "types/User";
+import { apiClient } from "config/Axios";
 
 interface AuthContextProps {
   authUser?: User;
-  profileType?: 'ADMIN' | 'INVITADO';
+  profileType?: "ADMIN" | "INVITADO";
   loginUser: (newUser: User) => any;
   validateUser: () => User | undefined;
-  logoutUser: () => any;
+  logoutUser: () => Promise<void>;
+  sessionExpired: boolean;
+  setSessionExpired: (expired: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({
   authUser: undefined,
   profileType: undefined,
-  loginUser: () => { },
+  loginUser: () => {},
   validateUser: () => undefined,
-  logoutUser: () => { },
+  logoutUser: async () => {},
+  sessionExpired: false,
+  setSessionExpired: () => {},
 });
 
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [authUser, setAuthUser] = useState<User | undefined>();
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const loginUser = (newUser: User) => setAuthUser(newUser);
 
   const validateUser = () => {
-    const storageUser = localStorage.getItem('user');
+    const storageUser = localStorage.getItem("user");
     const user = authUser || (storageUser ? JSON.parse(storageUser) : undefined);
     return user;
   };
 
-  const logoutUser = () => {
-    localStorage.removeItem('user');
+  const logoutUser = async () => {
+    const storedUser = localStorage.getItem("user");
+    const userId = storedUser ? JSON.parse(storedUser)._id : null;
+
+    if (userId) {
+      await apiClient.post("/auth/logout", { userId });
+    }
+
+    localStorage.removeItem("user");
     setAuthUser(undefined);
   };
 
@@ -41,6 +54,8 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
         loginUser,
         validateUser,
         logoutUser,
+        sessionExpired,
+        setSessionExpired,
       }}
     >
       {children}
@@ -48,4 +63,5 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
   );
 };
 
-export default AuthContext;
+export default AuthContextProvider;
+export { AuthContext };

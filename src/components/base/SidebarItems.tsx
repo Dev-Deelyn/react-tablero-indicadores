@@ -5,7 +5,7 @@ import { indexerRoutes } from 'router/routes'
 import SectionNavItem from 'components/common/SectionNavItem'
 import { Icon } from '@iconify/react'
 import { useContext, useEffect, useState } from 'react'
-import AuthContext from 'contexts/AuthContext'
+import { AuthContext } from 'contexts/AuthContext'
 import IndicatorRoute from 'types/IndicatorRoutes.types'
 
 const SidebarItems = () => {

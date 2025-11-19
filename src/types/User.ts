@@ -9,7 +9,7 @@ export default class User {
   public email = '';
   public profileType?: 'ADMIN' | 'INVITADO';
   public access: DashboardAccess[] = [];   // ← inicializo aquí
-  public token?: string;
+  public access_token?: string;
 
   constructor(data: Partial<User>) {
     Object.assign(this, data);

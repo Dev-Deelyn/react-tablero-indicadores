@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom';
 
-import AuthContext from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 import Base from 'containers/base';
 import UserList from 'containers/user/UsersList';

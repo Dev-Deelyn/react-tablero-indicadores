@@ -1,45 +1,148 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_SERVER_URL,
-  headers: {
-    "Content-Type": "application/json"
-  }
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true
 });
 
-// 1) Interceptor de request: añade siempre el Authorization header
-apiClient.interceptors.request.use(
-  (config) => {
-    const userJSON = localStorage.getItem('user');
-    let token: string | null = null;
-    if (userJSON) {
+let onSessionExpired: (() => void) | null = null;
+
+export function setOnSessionExpired(callback: () => void) {
+  onSessionExpired = callback;
+}
+
+// Cliente simple para refresh (sin interceptores)
+const refreshClient = axios.create({
+  baseURL: import.meta.env.VITE_APP_SERVER_URL,
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" }
+});
+
+// Si hay un refresh en curso, guardamos la promesa aquí para que otros esperen
+let refreshPromise: Promise<string> | null = null;
+
+function setAuthHeader(headers: any, token: string | null) {
+  const name = "Authorization";
+  const value = token ? `Bearer ${token}` : undefined;
+
+  if (headers && typeof headers.set === "function") {
+    if (value) headers.set(name, value);
+    else headers.delete?.(name);
+    return headers;
+  }
+  if (value) return { ...(headers || {}), [name]: value };
+  const copy = { ...(headers || {}) };
+  delete copy[name];
+  return copy;
+}
+
+function hasAuthHeader(headers: any): boolean {
+  if (!headers) return false;
+  if (typeof headers.has === "function") {
+    try { headers.has("Authorization"); } catch {}
+  }
+  const keys = Object.keys(headers || {});
+  return keys.map(k => k.toLowerCase()).includes("Authorization");
+}
+
+function cloneConfigWithToken(orig: AxiosRequestConfig, token: string | null): AxiosRequestConfig {
+  const origHeaders = (orig.headers && typeof orig.headers === "object") ? { ...(orig.headers as any) } : {};
+  return { ...orig, headers: setAuthHeader(origHeaders, token) };
+}
+
+// LLamada al refresh
+async function doRefresh(): Promise<string> {
+  const resp = await refreshClient.post("/auth/refresh", undefined, { withCredentials: true });
+  const newToken = resp.data?.data?.access_token ?? resp.data?.access_token;
+  if (!newToken) throw new Error("No access_token in refresh response");
+
+  // Actualiza LocalStorage
+  try {
+    const raw = localStorage.getItem("user");
+    if (raw) {
+      const user = JSON.parse(raw);
+      user.access_token = newToken;
+      localStorage.setItem("user", JSON.stringify(user));
+      console.log(localStorage.getItem("user"))
+    }
+  } catch (e) {
+    console.error("[Axios] failed to update localStorage with new token", e);
+  }
+
+  // Actualiza los headers del de apiClient
+  const defaultsHeaders: any = (apiClient.defaults.headers as any) || {};
+  if (defaultsHeaders && typeof defaultsHeaders.set === "function") {
+    defaultsHeaders.set("Authorization", `Bearer ${newToken}`);
+  } else {
+    (apiClient.defaults.headers as any) = {
+      ...(apiClient.defaults.headers as any || {}),
+      common: { ...((apiClient.defaults.headers as any)?.common || {}), Authorization: `Bearer ${newToken}` }
+    };
+  }
+
+  return newToken;
+}
+
+// Interceptor para agregar el token del LS a la request
+apiClient.interceptors.request.use((config) => {
+  try {
+    if (hasAuthHeader(config.headers)) return config;
+    const raw = localStorage.getItem("user");
+    if (!raw) return config;
+    const user = JSON.parse(raw);
+    const token = user?.access_token ?? user?.token;
+    if (token) config.headers = setAuthHeader(config.headers, token);
+  } catch (e) {
+    console.error("[Axios] request interceptor error", e);
+  }
+  return config;
+});
+
+// Interceptor para el refresh - Cuando recibe 
+apiClient.interceptors.response.use(
+  res => res,
+  async (error: AxiosError & { config?: AxiosRequestConfig & { _retry?: boolean } }) => {
+    const originalRequest = error.config!;
+    const status = error.response?.status;
+    const resInfo = error.response?.data;
+
+    console.log(resInfo)
+
+    if (!originalRequest) return Promise.reject(error);
+
+    // no refresh en endpoints de auth
+    if (originalRequest.url?.includes("/auth/login") ||
+        originalRequest.url?.includes("/auth/register") ||
+        originalRequest.url?.includes("/auth/refresh")) {
+      return Promise.reject(error);
+    }
+
+    // Si la request falla, se vuelve a intentar
+    if ((status === 401 || status === 403) && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       try {
-        const userData = JSON.parse(userJSON);
-        token = userData.token;
-      } catch (error) {
-        console.error('Error al parsear el usuario en localStorage:', error);
+        // si ya hay un refresh en curso, se espera esa promesa; si no, la inicia
+        if (!refreshPromise) refreshPromise = doRefresh();
+        const newToken = await refreshPromise;
+        refreshPromise = null;
+
+        // Se reintenta la request original con el token nuevo
+        const newConfig = cloneConfigWithToken(originalRequest, newToken);
+        return apiClient.request(newConfig);
+      } catch (err: any) {
+        refreshPromise = null;
+        // Si el refresh devolvió 401/403 equivale a una sesión expirada, así que se ejecuta el logout
+        const statusErr = err?.response?.status ?? err?.status;
+        if (statusErr === 401 || statusErr === 403) {
+          localStorage.removeItem("user");
+          if (onSessionExpired) onSessionExpired();
+        }
+        return Promise.reject(err);
       }
     }
-    // console.log('Intercepted request, token value:', token);
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    // console.log('Headers finales en la request:', config.headers);
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
-
-// 2) Interceptor de response: chequea correctamente el status
-apiClient.interceptors.response.use(
-  response => response,
-  (error: AxiosError) => {
-    const status = error.response?.status;
-    if (status === 401) {
-      // si recibís 401, redirigís a login
-      window.location.href = '/login';
-    }
     return Promise.reject(error);
   }
 );

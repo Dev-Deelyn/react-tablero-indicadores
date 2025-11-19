@@ -2,7 +2,7 @@ import { Box, Avatar, Button, ListItemIcon, Menu, MenuItem, Typography } from '@
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
 import { useContext } from 'react';
-import AuthContext from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const UserMenu = () => {
