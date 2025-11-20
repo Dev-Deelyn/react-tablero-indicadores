@@ -11,6 +11,8 @@ import LoginPage from 'containers/user/LoginPage';
 
 import { indexerRoutes, visibleRoutes } from './routes';
 
+import AnalyticsExcelContainer from '../containers/AnalyticsExcelContainer';
+
 const AppRouter = () => {
   const { profileType } = useContext(AuthContext);
 
@@ -22,13 +24,22 @@ const AppRouter = () => {
         { index: true, element: <Navigate to="/main" /> },
         {
           path: 'main',
-          element: <Indexer main title="indicadores provinciales" routes={indexerRoutes} />
+          element: (
+            <Indexer main title="indicadores provinciales" routes={indexerRoutes} />
+          )
         },
+
+        // Rutas visibles a todos los usuarios logueados
         ...visibleRoutes,
+        {
+          path: 'tableros/analytics-excel',
+          element: <AnalyticsExcelContainer />
+        },
+        // 👉 Rutas exclusivas para ADMIN
         ...(profileType === 'ADMIN'
           ? [
             { path: 'usuarios', element: <UserList /> },
-            { path: 'tableros', element: <DashboardList /> }
+            { path: 'tableros', element: <DashboardList /> },
           ]
           : [])
       ]
