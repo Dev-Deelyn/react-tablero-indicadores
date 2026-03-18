@@ -1,95 +1,369 @@
-:root {
-    --primary-blue: #004b9b;
-    --light-blue: #1976d2;
-    --background-gray: #f5f5f5;
-    --card-white: #ffffff;
-    --text-dark: #333333;
-    --border-gray: #dcdcdc;
-    --error-red: #a10000;
+/* ──────────────────────────────────────────────
+   dashboards-analytics.css
+   Estilos para el dashboard de análisis Excel
+────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-/* Contenedor principal del módulo */
+body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    margin: 0;
+}
+
+/* ── Contenedor principal ── */
 .dashboard-container {
-    background-color: var(--background-gray);
-    min-height: 100vh;
-    padding: 20px 40px;
-    font-family: "Roboto", "Segoe UI", sans-serif;
-    color: var(--text-dark);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
 }
 
-/* Título azul tipo “INDICE TABLERO DE SALUD” */
 .dashboard-title {
-    background-color: var(--primary-blue);
-    color: white;
-    padding: 12px 18px;
-    border-radius: 4px 4px 0 0;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+}
+
+/* ── Panel de controles ── */
+.control-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
     margin-bottom: 16px;
 }
 
-/* Panel blanco de controles */
-.control-panel {
-    background-color: var(--card-white);
-    padding: 20px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+.control-panel>div {
     display: flex;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 15px;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 140px;
 }
 
-/* Labels + selects */
 .control-panel label {
+    font-size: 12px;
     font-weight: 600;
-    display: block;
-    margin-bottom: 4px;
-    font-size: 0.9rem;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .control-panel select {
-    min-width: 150px;
-    padding: 6px 8px;
-    border: 1px solid var(--border-gray);
-    border-radius: 4px;
-    background-color: var(--card-white);
-    font-size: 0.9rem;
+    padding: 7px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    cursor: pointer;
+    transition: border-color 0.15s;
 }
 
-/* Botón principal */
+.control-panel select:hover,
+.control-panel select:focus {
+    border-color: #2563eb;
+    outline: none;
+    background: #fff;
+}
+
+/* ── Botones ── */
 .btn-primary {
-    background-color: var(--primary-blue);
-    color: white;
+    padding: 9px 20px;
+    background: #1d4ed8;
+    color: #fff;
     border: none;
-    border-radius: 4px;
-    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 13px;
     font-weight: 600;
+    font-family: 'IBM Plex Sans', sans-serif;
     cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+    align-self: flex-end;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #1e40af;
+    transform: translateY(-1px);
 }
 
 .btn-primary:disabled {
-    opacity: 0.7;
+    background: #94a3b8;
     cursor: not-allowed;
+    transform: none;
 }
 
-/* Contenedor del gráfico */
-.chart-container {
-    background-color: var(--card-white);
-    border-radius: 6px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Banner de error */
-.error-banner {
-    background: #ffe6e6;
-    color: var(--error-red);
-    padding: 8px 10px;
-    border-radius: 6px;
-    margin-bottom: 10px;
+.btn-add-chart {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    background: transparent;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
     font-weight: 600;
-    border: 1px solid #ffcccc;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.btn-add-chart:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.btn-clear-filters {
+    padding: 4px 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #dc2626;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.btn-clear-filters:hover {
+    background: #fee2e2;
+}
+
+.btn-remove-chart {
+    padding: 3px 10px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 5px;
+    font-size: 12px;
+    color: #dc2626;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.15s;
+}
+
+.btn-remove-chart:hover {
+    background: #fee2e2;
+}
+
+/* ── Error banner ── */
+.error-banner {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #b91c1c;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+/* ── Chips ── */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #475569;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ── Drop zone (FileUpload) ── */
+.drop-zone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #f8fafc;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.drop-zone.has-file {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+.drop-zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.drop-icon {
+    font-size: 36px;
+    line-height: 1;
+}
+
+.drop-hint {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* ── Panel de filtros ── */
+.filters-panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+}
+
+.filters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.filters-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filters-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.filter-group {
+    flex: 1 1 180px;
+    min-width: 140px;
+    max-width: 320px;
+}
+
+.filter-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-count {
+    background: #2563eb;
+    color: #fff;
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.filter-chip {
+    padding: 3px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #475569;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.12s;
+    font-family: 'IBM Plex Sans', sans-serif;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.filter-chip.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+}
+
+.filter-chip.active:hover {
+    background: #1d4ed8;
+}
+
+/* ── Panel de cada gráfico ── */
+.chart-panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.chart-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.chart-panel-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.chart-container {
+    width: 100%;
+}
+
+.chart-meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.chart-subtitle {
+    font-size: 12px;
+    color: #64748b;
+    font-style: italic;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
 }
