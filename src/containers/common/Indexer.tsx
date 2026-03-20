@@ -17,7 +17,7 @@ const cardTransitionDelay = 60;
 
 const Indexer: React.FC<IndexerProps> = (props) => {
   const [listRoutes, setListRoutes] = useState<IndicatorRoute[]>([])
-  const { authUser } = useContext(AuthContext);
+  const { authUser, accessKeynames } = useContext(AuthContext);
   const { changeNavTitle } = useContext(NavbarContext);
 
   useEffect(() => {
@@ -27,14 +27,15 @@ const Indexer: React.FC<IndexerProps> = (props) => {
   useEffect(() => {
     if (props.main) {
       if (authUser) {
-        const dashboardsPublics = authUser.dashboards;
-        const list = props.routes.filter(route => route.show).filter(route => dashboardsPublics?.includes(route.keyname ?? ''))
-        setListRoutes(list)
+        const list = props.routes
+          .filter(route => route.show)
+          .filter(route => accessKeynames.includes(route.keyname ?? ''));
+        setListRoutes(list);
       }
     } else {
-      setListRoutes(props.routes)
+      setListRoutes(props.routes);
     }
-  }, [props.routes, authUser])
+  }, [props.routes, accessKeynames]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

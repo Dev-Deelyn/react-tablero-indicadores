@@ -1,11 +1,13 @@
 import { createContext, useState } from "react";
 import User from "types/User";
 import { apiClient } from "config/Axios";
+import { getAllDashboards } from "services/DashboardServices";
 
 interface AuthContextProps {
   authUser?: User;
   profileType?: "ADMIN" | "INVITADO";
-  loginUser: (newUser: User) => any;
+  accessKeynames: string[];
+  loginUser: (newUser: User) => Promise<void>;
   validateUser: () => User | undefined;
   logoutUser: () => Promise<void>;
   sessionExpired: boolean;
@@ -15,7 +17,8 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({
   authUser: undefined,
   profileType: undefined,
-  loginUser: () => {},
+  accessKeynames: [],
+  loginUser: async () => {},
   validateUser: () => undefined,
   logoutUser: async () => {},
   sessionExpired: false,
@@ -24,9 +27,22 @@ const AuthContext = createContext<AuthContextProps>({
 
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [authUser, setAuthUser] = useState<User | undefined>();
+  const [accessKeynames, setAccessKeynames] = useState<string[]>([]);
   const [sessionExpired, setSessionExpired] = useState(false);
 
-  const loginUser = (newUser: User) => setAuthUser(newUser);
+  const loginUser = async (newUser: User) => {
+    setAuthUser(newUser);
+    try {
+      const res = await getAllDashboards();
+      const keynames = (res.data ?? [])
+        .filter((d: any) => newUser.access.some(a => a.dashboard === d._id))
+        .map((d: any) => d.keyname);
+      setAccessKeynames(keynames);
+    } catch (error) {
+      console.error('Error al cargar dashboards:', error);
+      setAccessKeynames([]);
+    }
+  };
 
   const validateUser = () => {
     const storageUser = localStorage.getItem("user");
@@ -44,6 +60,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
 
     localStorage.removeItem("user");
     setAuthUser(undefined);
+    setAccessKeynames([]);
   };
 
   return (
@@ -51,6 +68,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
       value={{
         authUser,
         profileType: authUser?.profileType,
+        accessKeynames,
         loginUser,
         validateUser,
         logoutUser,

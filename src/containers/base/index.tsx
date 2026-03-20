@@ -14,43 +14,36 @@ const Base = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { validateUser, loginUser } = useContext(AuthContext);
+  const { validateUser, loginUser, accessKeynames } = useContext(AuthContext);
 
   const theme = useTheme();
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
 
   useEffect(() => {
-    const user = validateUser()
+    const user = validateUser();
     if (!user) {
       navigate('/login');
     } else {
-      loginUser(user)
+      loginUser(user);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const user = validateUser()
+    const user = validateUser();
     if (!user) {
       navigate('/login');
     } else {
-      const [mainPath] = location.pathname.split('/');
+      const [mainPath] = location.pathname.split('/').filter(Boolean);
       const validDashboards = routesKeynamesVisibles;
 
       if (validDashboards.includes(mainPath)) {
-        const isValid = user.dashboards?.includes(mainPath)
-        if (!isValid) {
-          navigate('/')
-        }
+        const isValid = accessKeynames.includes(mainPath);
+        if (!isValid) navigate('/');
       }
     }
-  }, [location])
+  }, [location, accessKeynames]);
 
   return (
     <NavbarContextProvider>
