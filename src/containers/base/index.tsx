@@ -14,7 +14,7 @@ const Base = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { validateUser, loginUser, accessKeynames } = useContext(AuthContext);
+  const { validateUser, loginUser, accessKeynames, refreshAccessKeynames } = useContext(AuthContext);
 
   const theme = useTheme();
 
@@ -35,15 +35,21 @@ const Base = () => {
     if (!user) {
       navigate('/login');
     } else {
-      const [mainPath] = location.pathname.split('/').filter(Boolean);
-      const validDashboards = routesKeynamesVisibles;
-
-      if (validDashboards.includes(mainPath)) {
-        const isValid = accessKeynames.includes(mainPath);
-        if (!isValid) navigate('/');
-      }
+      refreshAccessKeynames();
     }
-  }, [location, accessKeynames]);
+  }, [location]);
+
+  useEffect(() => {
+    const user = validateUser();
+    if (!user) return;
+
+    const [mainPath] = location.pathname.split('/').filter(Boolean);
+
+    if (accessKeynames.length > 0 && routesKeynamesVisibles.includes(mainPath)) {
+      const isValid = accessKeynames.includes(mainPath);
+      if (!isValid) navigate('/');
+    }
+  }, [accessKeynames]);
 
   return (
     <NavbarContextProvider>

@@ -39,7 +39,7 @@ const DashboardTable: React.FC<DashboardTableProps> = (props) => {
     try {
       // Llama al servicio para actualizar la visibilidad.
       // Se pasa undefined en newKeyname para indicar que no se quiere modificar el nombre.
-      await sendEditDashboard(dashboard._id!, undefined, newShow);
+      await sendEditDashboard(dashboard._id!, newShow);
 
       // Si se ha definido un callback onVisibilityToggle, se invoca para que el componente
       // padre pueda refrescar o actualizar la lista de dashboards.
@@ -88,7 +88,7 @@ const DashboardTable: React.FC<DashboardTableProps> = (props) => {
                       style={{ fontSize: '24px', marginRight: '8px', verticalAlign: 'middle' }}
                     />
                   )}
-                  {dashboard.keyname}
+                  {dashboard.name || dashboard.keyname}
                 </TableCell>
                 <TableCell>
                 {/* El Switch ahora es interactivo: al cambiar su valor se llama a handleSwitchChange */}

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { AuthContext } from '../contexts/AuthContext';
@@ -9,12 +9,22 @@ import DashboardList from 'containers/board/DashboardList';
 import Indexer from 'containers/common/Indexer';
 import LoginPage from 'containers/user/LoginPage';
 
-import { indexerRoutes, visibleRoutes } from './routes';
-
-import AnalyticsExcelContainer from '../containers/AnalyticsExcelContainer';
+import { buildRoutesFromDashboards, buildIndexerRoutes } from './dynamicRoutes';
+import { getAllDashboards } from 'services/DashboardServices';
+import Dashboard from 'types/Dashboard';
 
 const AppRouter = () => {
-  const { profileType } = useContext(AuthContext);
+  const { profileType, accessSections } = useContext(AuthContext);
+  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+
+  useEffect(() => {
+    getAllDashboards().then(res => {
+      setDashboards(res.data ?? []);
+    });
+  }, []);
+
+  const dynamicRoutes = buildRoutesFromDashboards(dashboards, accessSections);
+  const indexerRoutes = buildIndexerRoutes(dashboards);
 
   const routes = [
     {
@@ -24,18 +34,9 @@ const AppRouter = () => {
         { index: true, element: <Navigate to="/main" /> },
         {
           path: 'main',
-          element: (
-            <Indexer main title="indicadores provinciales" routes={indexerRoutes} />
-          )
+          element: <Indexer main title="indicadores provinciales" routes={indexerRoutes} />
         },
-
-        // Rutas visibles a todos los usuarios logueados
-        ...visibleRoutes,
-        {
-          path: 'tableros/analytics-excel',
-          element: <AnalyticsExcelContainer />
-        },
-        // 👉 Rutas exclusivas para ADMIN
+        ...dynamicRoutes,
         ...(profileType === 'ADMIN'
           ? [
             { path: 'usuarios', element: <UserList /> },

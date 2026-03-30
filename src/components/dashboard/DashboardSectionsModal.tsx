@@ -31,11 +31,21 @@ interface SectionsModalProps {
   onClose: () => void;
 }
 
+const generateKeyname = (name: string): string => {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+};
+
 const DashboardSectionsModal: React.FC<SectionsModalProps> = ({ dashboard, open, onClose }) => {
   // Estado para las secciones; se actualiza cuando llega dashboard.sections.
   const [sections, setSections] = useState<Sections[]>(dashboard?.sections ?? []);
   // Modo de edición para cada sección: guardará el nuevo keyname.
-  const [editingSections, setEditingSections] = useState<Record<string, { newKeyname: string }>>({});
+  const [editingSections, setEditingSections] = useState<Record<string, { newKeyname: string, newName: string }>>({});
   // Estado para el collapse del formulario "Agregar Sección".
   const [addingSection, setAddingSection] = useState(false);
   const [newSectionName, setNewSectionName] = useState('');
@@ -57,20 +67,23 @@ const DashboardSectionsModal: React.FC<SectionsModalProps> = ({ dashboard, open,
           section._id === sectionId ? { ...section, show: !currentValue } : section
         )
       );
-      await sendEditSection(sectionId, undefined, !currentValue);
+      await sendEditSection(sectionId, !currentValue);
     } catch (error) {
       console.error("Error al actualizar visibilidad", error);
     }
   };
 
   // Inicia el modo edición de una sección.
-  const handleStartEditing = (sectionId: string, currentKeyname: string) => {
-    setEditingSections(prev => ({ ...prev, [sectionId]: { newKeyname: currentKeyname } }));
+  const handleStartEditing = (sectionId: string, currentName: string) => {
+    setEditingSections(prev => ({ ...prev, [sectionId]: { newKeyname: generateKeyname(currentName), newName: currentName } }));
   };
 
   // Actualiza el TextField en el modo edición.
   const handleChangeEditing = (sectionId: string, value: string) => {
-    setEditingSections(prev => ({ ...prev, [sectionId]: { newKeyname: value } }));
+    setEditingSections(prev => ({ 
+      ...prev, 
+      [sectionId]: { newKeyname: generateKeyname(value), newName: value }
+    }));
   };
 
   // Cancela el modo edición.
@@ -84,19 +97,25 @@ const DashboardSectionsModal: React.FC<SectionsModalProps> = ({ dashboard, open,
 
   // Guarda el cambio de nombre y actualiza la sección mediante la API.
   const handleSaveEditing = async (sectionId: string) => {
-    try {
-      const updatedName = editingSections[sectionId].newKeyname;
-      const updatedSection = await sendEditSection(sectionId, updatedName);
-      setSections(prev =>
-        prev.map(section =>
-          section._id === sectionId ? { ...section, keyname: updatedSection.keyname } : section
-        )
-      );
-      handleCancelEditing(sectionId);
-    } catch (error) {
-      console.error("Error actualizando la sección", error);
-    }
-  };
+  try {
+    const updatedSection = await sendEditSection(
+      sectionId, 
+      undefined, 
+      editingSections[sectionId].newName, 
+      editingSections[sectionId].newKeyname
+    );
+    setSections(prev =>
+      prev.map(section =>
+        section._id === sectionId 
+          ? { ...section, keyname: updatedSection.keyname, name: updatedSection.name } 
+          : section
+      )
+    );
+    handleCancelEditing(sectionId);
+  } catch (error) {
+    console.error("Error actualizando la sección", error);
+  }
+};
 
   // Maneja la eliminación de una sección: muestra confirmación y luego llama a la API.
   const handleDeleteSection = async (sectionId: string) => {
@@ -112,7 +131,11 @@ const DashboardSectionsModal: React.FC<SectionsModalProps> = ({ dashboard, open,
   // Agrega una nueva sección y actualiza la lista en el dashboard.
   const handleAddNewSection = async () => {
     try {
-      const createdSection = await sendCreateSection({ keyname: newSectionName, show: newSectionShow });
+      const createdSection = await sendCreateSection({ 
+        keyname: generateKeyname(newSectionName), 
+        name: newSectionName, 
+        show: newSectionShow 
+      });
       if (dashboard?._id) {
         // Extraemos los _id de las secciones actuales (asegurados).
         const sectionIds = sections.map(sec => sec._id!);
@@ -171,13 +194,13 @@ const DashboardSectionsModal: React.FC<SectionsModalProps> = ({ dashboard, open,
                   <Box flexGrow={1}>
                     {editingSections[sectionId] ? (
                       <TextField
-                        value={editingSections[sectionId].newKeyname}
+                        value={editingSections[sectionId].newName}
                         onChange={(e) => handleChangeEditing(sectionId, e.target.value)}
                         size="small"
                         variant="outlined"
                       />
                     ) : (
-                      <Typography variant="body1">{section.keyname}</Typography>
+                      <Typography variant="body1">{section.name || section.keyname}</Typography>
                     )}
                   </Box>
                   <Box width={140} display="flex" alignItems="center">
@@ -192,7 +215,7 @@ const DashboardSectionsModal: React.FC<SectionsModalProps> = ({ dashboard, open,
                       </>
                     ) : (
                       <>
-                        <IconButton color='primary' onClick={() => handleStartEditing(sectionId, section.keyname)}>
+                        <IconButton color='primary' onClick={() => handleStartEditing(sectionId, section.name || '')}>
                           <EditIcon />
                         </IconButton>
                         <IconButton color='secondary' onClick={() => setConfirmDeleteId(sectionId)}>

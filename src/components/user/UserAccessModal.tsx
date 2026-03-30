@@ -24,6 +24,7 @@ import {
 interface SectionType {
   _id: string;
   keyname: string;
+  name: string
 }
 
 interface DashboardType {
@@ -31,6 +32,7 @@ interface DashboardType {
   keyname: string;
   icon: string;
   sections: SectionType[];
+  name: string
 }
 
 interface AccessState {
@@ -177,7 +179,7 @@ const UserAccessModal: React.FC<UserAccessModalProps> = ({
               <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Box display="flex" alignItems="center">
                   {dash.icon && <Icon icon={dash.icon} style={{ fontSize: 24, marginRight: 8 }} />}
-                  <Typography variant="subtitle1">{dash.keyname}</Typography>
+                  <Typography variant="subtitle1">{dash.name}</Typography>
                 </Box>
                 <Box display="flex" alignItems="center">
                   <FormControlLabel
@@ -206,7 +208,7 @@ const UserAccessModal: React.FC<UserAccessModalProps> = ({
                           onChange={() => handleSectionToggle(dash._id, sec._id)}
                         />
                       }
-                      label={sec.keyname}
+                      label={sec.name}
                     />
                   ))}
                 </Box>

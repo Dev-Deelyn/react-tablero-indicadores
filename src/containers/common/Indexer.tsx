@@ -24,6 +24,8 @@ const Indexer: React.FC<IndexerProps> = (props) => {
     changeNavTitle(props.title ? `${headTitle} ${props.title}` : '')
   }, [props.title])
 
+  // console.log('Consola de Indexer.tsx:', accessKeynames)
+
   useEffect(() => {
     if (props.main) {
       if (authUser) {

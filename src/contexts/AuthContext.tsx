@@ -12,6 +12,8 @@ interface AuthContextProps {
   logoutUser: () => Promise<void>;
   sessionExpired: boolean;
   setSessionExpired: (expired: boolean) => void;
+  refreshAccessKeynames: () => Promise<void>;
+  accessSections: Record<string, string[]>;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -23,25 +25,36 @@ const AuthContext = createContext<AuthContextProps>({
   logoutUser: async () => {},
   sessionExpired: false,
   setSessionExpired: () => {},
+  refreshAccessKeynames: async () => {},
+  accessSections: {}
 });
 
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [authUser, setAuthUser] = useState<User | undefined>();
   const [accessKeynames, setAccessKeynames] = useState<string[]>([]);
+  const [accessSections, setAccessSections] = useState<Record<string, string[]>>({});
   const [sessionExpired, setSessionExpired] = useState(false);
 
-  const loginUser = async (newUser: User) => {
-    setAuthUser(newUser);
+  const refreshAccessKeynames = async () => {
     try {
-      const res = await getAllDashboards();
-      const keynames = (res.data ?? [])
-        .filter((d: any) => newUser.access.some(a => a.dashboard === d._id))
-        .map((d: any) => d.keyname);
-      setAccessKeynames(keynames);
+      const res = await apiClient.get('/user/my-dashboards');
+      const data = res.data?.data ?? [];
+      setAccessKeynames(data.map((d: any) => d.keyname));
+      const sections: Record<string, string[]> = {};
+      data.forEach((d: any) => {
+        sections[d.keyname] = d.sections;
+      });
+      setAccessSections(sections);
     } catch (error) {
       console.error('Error al cargar dashboards:', error);
       setAccessKeynames([]);
+      setAccessSections({});
     }
+  };
+
+  const loginUser = async (newUser: User) => {
+    setAuthUser(newUser);
+    await refreshAccessKeynames();
   };
 
   const validateUser = () => {
@@ -74,6 +87,8 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
         logoutUser,
         sessionExpired,
         setSessionExpired,
+        refreshAccessKeynames,
+        accessSections
       }}
     >
       {children}

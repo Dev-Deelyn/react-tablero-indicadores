@@ -11,11 +11,12 @@ export const getAllDashboards = async (): Promise<DataResponse<Dashboard[]>> => 
   return await responseFormatter(apiClient.get('/dashboard/get-all'));
 };
 
-export const sendEditDashboard = async (dashboardId: string, newKeyname?: string, show?: boolean, icon?: string) => {
+export const sendEditDashboard = async (dashboardId: string, show?: boolean, icon?: string, newName?: string, newKeyname?: string) => {
   const payload: any = {};
-  if (newKeyname !== undefined) payload.newKeyname = newKeyname;
   if (show !== undefined) payload.show = show;
   if (icon !== undefined) payload.icon = icon;
+  if (newName !== undefined) payload.newName = newName;
+  if (newKeyname !== undefined) payload.newKeyname = newKeyname;
 
   return (await responseFormatter(apiClient.put(`/dashboard/edit/${dashboardId}`, payload))).data;
 };

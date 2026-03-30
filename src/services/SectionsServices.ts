@@ -11,12 +11,13 @@ export const getAllSections = async (): Promise<DataResponse<Sections[]>> => {
   return await responseFormatter(apiClient.get('/sections/get-all'));
 };
 
-export const sendEditSection = async (sectionId: string, newKeyname?: string, show?: boolean) => {
+export const sendEditSection = async (sectionId: string, show?: boolean, newName?: string, newKeyname?: string) => {
   const payload: any = {};
-  if (newKeyname !== undefined) payload.newKeyname = newKeyname;
   if (show !== undefined) payload.show = show;
+  if (newName !== undefined) payload.newName = newName;
+  if (newKeyname !== undefined) payload.newKeyname = newKeyname;
 
-  return (await responseFormatter(apiClient.post(`/sections/edit/${sectionId}`, payload))).data;
+  return (await responseFormatter(apiClient.put(`/sections/edit/${sectionId}`, payload))).data;
 };
 
 // SectionsServices.ts

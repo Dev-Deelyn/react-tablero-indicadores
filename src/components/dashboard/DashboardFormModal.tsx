@@ -33,6 +33,15 @@ interface MaterialSymbols {
   categories: Record<string, string[]>;
 }
 
+const generateKeyname = (name: string): string => {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // elimina acentos
+    .replace(/[^a-z0-9\s-]/g, '')    // elimina caracteres especiales
+    .trim()
+    .replace(/\s+/g, '-');            // reemplaza espacios por guiones
+};
 
 const iconData = materialSymbolsData as MaterialSymbols;
 
@@ -64,7 +73,16 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name as string]: value }));
+    setForm((prev) => {
+      const updated = { ...prev, [name as string]: value };
+      if (name === 'name') {
+        updated.keyname = generateKeyname(value as string);
+      }
+      if (name === 'newName') {
+        updated.newKeyname = generateKeyname(value as string);
+      }
+      return updated;
+    });
   };
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,14 +97,15 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
         if (dashboardId) {
           await sendEditDashboard(
             dashboardId,
-            form.newKeyname || undefined,
             form.show,
-            form.icon || undefined
+            form.icon || undefined,
+            form.newName || undefined,
+            form.newKeyname || undefined
           );
         }
       } else {
         if (form.keyname) {
-          const payload = { keyname: form.keyname, show: form.show || false, icon: form.icon || '' };
+          const payload = { keyname: form.keyname, name: form.name || '', show: form.show || false, icon: form.icon || '' };
           await sendCreateDashboard(payload);
         }
       }
@@ -108,6 +127,7 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
       // En modo creación, reiniciamos el formulario a sus valores por defecto
       setForm({
         keyname: '',
+        name: '',
         show: false,
         icon: ''
       });
@@ -126,6 +146,7 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
     } else {
       setForm({
         keyname: '',
+        name: '',
         show: false,
         icon: ''
       });
@@ -145,21 +166,21 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
           <>
             <TextField
               margin="dense"
-              name="keyname"
-              label="Nombre actual del tablero"
+              name="newName"
+              label="Nuevo nombre visible"
               type="text"
               fullWidth
-              value={form?.keyname || ''}
-              disabled
+              value={form?.newName || ''}
+              onChange={handleChange}
             />
             <TextField
               margin="dense"
               name="newKeyname"
-              label="Nuevo nombre del tablero"
+              label="Nuevo identificador (keyname)"
               type="text"
               fullWidth
               value={form?.newKeyname || ''}
-              onChange={handleChange}
+              disabled
             />
             <Container style={{ marginTop: '10px' }}>
               <Button variant="outlined" onClick={() => setShowIconPicker((prev) => !prev)}>
@@ -204,12 +225,21 @@ const DashboardFormModal: React.FC<DashboardFormModalProps> = (props) => {
             <TextField
               autoFocus
               margin="dense"
-              name="keyname"
+              name="name"
               label="Nombre del tablero"
               type="text"
               fullWidth
-              value={form?.keyname || ''}
+              value={form?.name || ''}
               onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
+              name="keyname"
+              label="Identificador (keyname)"
+              type="text"
+              fullWidth
+              value={form?.keyname || ''}
+              disabled
             />
             <FormControlLabel
               control={
