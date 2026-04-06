@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import User from 'types/User';
 import UserFormModal from 'components/user/UserFormModal';
 import { getAllUsers, deleteUser } from 'services/UserServices';
@@ -11,6 +11,8 @@ const UserList = () => {
   const [openAccess, setOpenAccess] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [listUsers, setListUsers] = useState<User[]>([]);
+  const [confirmDeleteUser, setConfirmDeleteUser] = useState<User | undefined>();
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -49,12 +51,25 @@ const UserList = () => {
   }
 
   const handleDeleteUser = async (user: User) => {
+    setSelectedUser(user);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedUser) return;
     try {
-      await deleteUser(user.username, user.email);
-      setListUsers((prevUsers) => prevUsers.filter((u) => u.username !== user.username));
+      await deleteUser(selectedUser.username, selectedUser.email);
+      setListUsers((prevUsers) => prevUsers.filter((u) => u.username !== selectedUser.username));
+      setConfirmDeleteOpen(false);
+      setSelectedUser(undefined);
     } catch (error) {
       console.error('Error al eliminar usuario:', error);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDeleteOpen(false);
+    setSelectedUser(undefined);
   };
 
   useEffect(() => {
@@ -73,7 +88,21 @@ const UserList = () => {
         onClickEdit={handleEditUser}
         onClickDashboards={handleOpenAccess}
         onClickDelete={handleDeleteUser}
+        onCancelDelete={handleCancelDelete}
+        confirmDeleteUser={confirmDeleteUser}
       />
+      <Dialog open={confirmDeleteOpen} onClose={handleCancelDelete}>
+        <DialogTitle>Confirmar eliminación</DialogTitle>
+        <DialogContent>
+          <Typography>
+            ¿Estás seguro de eliminar al usuario <strong>{selectedUser?.username}</strong>? Esta acción no se puede deshacer.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} color="primary">Cancelar</Button>
+          <Button onClick={handleConfirmDelete} color="error">Eliminar</Button>
+        </DialogActions>
+      </Dialog>
       <UserAccessModal show={openAccess} item={selectedUser} onAccept={refreshListUsers} onClose={handleCloseAccess}/>
     </div>
   );

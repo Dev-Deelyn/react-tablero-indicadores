@@ -95,32 +95,32 @@ const UserAccessModal: React.FC<UserAccessModalProps> = ({
     }
   };
 
-  const getAccessChanges = () => {
-    const added: DashboardAccess[] = [];
-    const removed: string[] = [];
-    const updated: DashboardAccess[] = [];
+  // const getAccessChanges = () => {
+  //   const added: DashboardAccess[] = [];
+  //   const removed: string[] = [];
+  //   const updated: DashboardAccess[] = [];
 
-    for (const dashId of Object.keys(accessState)) {
-      const before = initialAccessState[dashId];
-      const now = accessState[dashId];
-      const selectedSecs = Object.keys(now.sections).filter((s) => now.sections[s]);
+  //   for (const dashId of Object.keys(accessState)) {
+  //     const before = initialAccessState[dashId];
+  //     const now = accessState[dashId];
+  //     const selectedSecs = Object.keys(now.sections).filter((s) => now.sections[s]);
 
-      if (!before.enabled && now.enabled) {
-        added.push({ dashboard: dashId, sections: selectedSecs });
-      }
-      if (before.enabled && !now.enabled) {
-        removed.push(dashId);
-      }
-      if (before.enabled && now.enabled) {
-        const diff = selectedSecs.filter((s) => before.sections[s] !== now.sections[s]);
-        if (diff.length) {
-          updated.push({ dashboard: dashId, sections: selectedSecs });
-        }
-      }
-    }
+  //     if (!before.enabled && now.enabled) {
+  //       added.push({ dashboard: dashId, sections: selectedSecs });
+  //     }
+  //     if (before.enabled && !now.enabled) {
+  //       removed.push(dashId);
+  //     }
+  //     if (before.enabled && now.enabled) {
+  //       const diff = selectedSecs.filter((s) => before.sections[s] !== now.sections[s]);
+  //       if (diff.length) {
+  //         updated.push({ dashboard: dashId, sections: selectedSecs });
+  //       }
+  //     }
+  //   }
 
-    return { added, removed, updated };
-  };
+  //   return { added, removed, updated };
+  // };
 
   const handleDashboardToggle = (dashId: string) =>
     setAccessState((prev) => {
