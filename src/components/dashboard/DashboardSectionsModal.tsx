@@ -163,7 +163,7 @@ const DashboardSectionsModal: React.FC<SectionsModalProps> = ({ dashboard, open,
             style={{ fontSize: '24px', marginRight: 8, verticalAlign: 'middle' }}
           />
         )}
-        {dashboard?.keyname || ''}
+        {dashboard?.name || ''}
       </DialogTitle>
       <DialogContent>
         <Container>

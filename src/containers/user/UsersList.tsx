@@ -11,7 +11,6 @@ const UserList = () => {
   const [openAccess, setOpenAccess] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [listUsers, setListUsers] = useState<User[]>([]);
-  const [confirmDeleteUser, setConfirmDeleteUser] = useState<User | undefined>();
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
@@ -89,7 +88,6 @@ const UserList = () => {
         onClickDashboards={handleOpenAccess}
         onClickDelete={handleDeleteUser}
         onCancelDelete={handleCancelDelete}
-        confirmDeleteUser={confirmDeleteUser}
       />
       <Dialog open={confirmDeleteOpen} onClose={handleCancelDelete}>
         <DialogTitle>Confirmar eliminación</DialogTitle>

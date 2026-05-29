@@ -6,7 +6,7 @@ import NavBar from 'components/base/Navbar';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Sidebar from 'components/base/Sidebar';
 import { NavbarContextProvider } from 'contexts/NavbarContext';
-import { AuthContext, AuthContextProvider } from 'contexts/AuthContext';
+import { AuthContext } from 'contexts/AuthContext';
 import { routesKeynamesVisibles } from 'router/routes';
 
 const Base = () => {

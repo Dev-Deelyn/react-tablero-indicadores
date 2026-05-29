@@ -9,7 +9,7 @@ interface Props {
 const SessionExpiredModal: React.FC<Props> = ({ open, onClose, onConfirm }) => (
   <Dialog
   open={open}
-  onClose={(event, reason) => {
+  onClose={(_event, reason) => {
     if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
       onClose();
     }

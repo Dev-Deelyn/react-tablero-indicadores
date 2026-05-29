@@ -1,12 +1,10 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 // import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import User from 'types/User';
 import React from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
 
 
 interface TableItemsProps {
@@ -15,7 +13,6 @@ interface TableItemsProps {
   onClickDelete?: (item: User) => any;
   onClickDashboards?: (item: User) => any;
   onCancelDelete?: () => any;
-  confirmDeleteUser?: User;
 }
 
 const TableItems: React.FC<TableItemsProps> = (props) => {
@@ -69,23 +66,6 @@ const TableItems: React.FC<TableItemsProps> = (props) => {
                   )}
                 </TableCell>
               </TableRow>
-              {props.confirmDeleteUser?.username === user.username && (
-                <TableRow>
-                  <TableCell colSpan={4}>
-                    <Box display="flex" alignItems="center">
-                      <Typography variant="body2" color="error" style={{ marginRight: 8 }}>
-                        ¿Estás seguro de eliminar a {user.username}?
-                      </Typography>
-                      <IconButton color="primary" onClick={() => handleDelete(user)}>
-                        <CheckIcon />
-                      </IconButton>
-                      <IconButton color="secondary" onClick={props.onCancelDelete}>
-                        <CloseIcon />
-                      </IconButton>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              )}
             </React.Fragment>
           ))}
         </TableBody>

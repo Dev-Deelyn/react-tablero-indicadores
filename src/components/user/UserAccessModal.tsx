@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import { Icon } from '@iconify/react';
-import User, { DashboardAccess } from 'types/User';
+import User from 'types/User';
 import { getAllDashboards } from 'services/DashboardServices';
 import {
   updateUserAccess,
@@ -57,7 +57,6 @@ const UserAccessModal: React.FC<UserAccessModalProps> = ({
 }) => {
   const [dashboards, setDashboards] = useState<DashboardType[]>([]);
   const [accessState, setAccessState] = useState<AccessState>({});
-  const [initialAccessState, setInitialAccessState] = useState<AccessState>({});
   const [expanded, setExpanded] = useState<{ [dashId: string]: boolean }>({});
 
   console.log(item)
@@ -88,7 +87,6 @@ const UserAccessModal: React.FC<UserAccessModalProps> = ({
         });
 
         setAccessState(init);
-        setInitialAccessState(JSON.parse(JSON.stringify(init)));
       }
     } catch (e) {
       console.error(e);

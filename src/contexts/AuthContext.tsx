@@ -1,7 +1,6 @@
 import { createContext, useState } from "react";
 import User from "types/User";
 import { apiClient } from "config/Axios";
-import { getAllDashboards } from "services/DashboardServices";
 
 interface AuthContextProps {
   authUser?: User;
@@ -14,6 +13,7 @@ interface AuthContextProps {
   setSessionExpired: (expired: boolean) => void;
   refreshAccessKeynames: () => Promise<void>;
   accessSections: Record<string, string[]>;
+  accessDashboards: { keyname: string; name?: string; icon?: string }[];
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -26,7 +26,8 @@ const AuthContext = createContext<AuthContextProps>({
   sessionExpired: false,
   setSessionExpired: () => {},
   refreshAccessKeynames: async () => {},
-  accessSections: {}
+  accessSections: {},
+  accessDashboards: []
 });
 
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -34,12 +35,14 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
   const [accessKeynames, setAccessKeynames] = useState<string[]>([]);
   const [accessSections, setAccessSections] = useState<Record<string, string[]>>({});
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [accessDashboards, setAccessDashboards] = useState<{ keyname: string; name?: string; icon?: string }[]>([]);
 
   const refreshAccessKeynames = async () => {
     try {
       const res = await apiClient.get('/user/my-dashboards');
       const data = res.data?.data ?? [];
       setAccessKeynames(data.map((d: any) => d.keyname));
+      setAccessDashboards(data.map((d: any) => ({ keyname: d.keyname, name: d.name, icon: d.icon })));
       const sections: Record<string, string[]> = {};
       data.forEach((d: any) => {
         sections[d.keyname] = d.sections;
@@ -48,6 +51,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
     } catch (error) {
       console.error('Error al cargar dashboards:', error);
       setAccessKeynames([]);
+      setAccessDashboards([]);
       setAccessSections({});
     }
   };
@@ -88,7 +92,8 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({ childre
         sessionExpired,
         setSessionExpired,
         refreshAccessKeynames,
-        accessSections
+        accessSections,
+        accessDashboards
       }}
     >
       {children}
