@@ -1,9 +1,18 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
+// Usa automáticamente localhost o la IP actual del frontend
+const API_URL = `${window.location.protocol}//${window.location.hostname}:${
+  import.meta.env.VITE_APP_SERVER_PORT || 3000
+}`;
+
+console.log(API_URL)
+
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_APP_SERVER_URL,
-  headers: { "Content-Type": "application/json" },
-  withCredentials: true
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });
 
 let onSessionExpired: (() => void) | null = null;
@@ -13,10 +22,12 @@ export function setOnSessionExpired(callback: () => void) {
 }
 
 // Cliente simple para refresh (sin interceptores)
-const refreshClient = axios.create({
-  baseURL: import.meta.env.VITE_APP_SERVER_URL,
+export const refreshClient = axios.create({
+  baseURL: API_URL,
   withCredentials: true,
-  headers: { "Content-Type": "application/json" }
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // Si hay un refresh en curso, guardamos la promesa aquí para que otros esperen
