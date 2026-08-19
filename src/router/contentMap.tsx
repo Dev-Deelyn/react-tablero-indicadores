@@ -1,6 +1,7 @@
 import { JSX } from 'react';
 import AnalyticsExcelContainer from 'containers/AnalyticsExcelContainer';
-// import Coparticipacion from 'containers/economia/Coparticipacion';
+import EfectoresDeSalud from 'containers/salud/EfectoresDeSalud';
+import Coparticipacion from 'containers/economia/Coparticipacion';
 
 // Estructura: contentMap[keyname-del-tablero][keyname-de-la-sección]
 
@@ -9,7 +10,10 @@ const contentMap: Record<string, Record<string, JSX.Element>> = {
   //   'keyname-de-la-seccion': <Componente />
   // }
   "economia": {
-    // "coparticipacion---cfi-y-totales": <Coparticipacion />
+    "coparticipacion---cfi-y-totales": <Coparticipacion />
+  },
+  "tablero-de-salud": {
+    "efectores-de-salud": <EfectoresDeSalud />
   }
 };
 
